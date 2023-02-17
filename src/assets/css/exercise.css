@@ -1,0 +1,14 @@
+.exercises-list {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.exercise-item:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.exercise-img {
+    width: 400px;
+}

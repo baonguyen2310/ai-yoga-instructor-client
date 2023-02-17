@@ -2,12 +2,40 @@ import * as tf from '@tensorflow/tfjs';
 import * as poseDetection from '@tensorflow-models/pose-detection';
 import Webcam from 'react-webcam';
 import { useRef, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import { detector, poseClassifier } from '../App';
 
 let interval;
 
 const Yoga = () => {
+    const location = useLocation();
+    const { exerciseName } = location.state;
+
+    const [ countdown, setCountdown ] = useState(20000);
+    const countdownRef = useRef(20000);
+
+    //Không thể dùng useState (lý do ở component Test)
+    // const [ isStart, setIsStart ] = useState(false);
+    // const [ isPause, setIsPause ] = useState(false);
+    // const [ startTime, setStartTime ] = useState();
+
+    const startTimeRef = useRef();  
+    const flag = useRef();  //default undefined, dùng !isStartRef.current -> true
+
+    const requestRef = useRef();
+
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
+
+    const completedRef = useRef();
+
+    //completedRef.current.style.visibility = "hidden"; //không được, kể cả ref cũng cần được mount trước khi sử dụng
+    //dùng useEffect vì useEffect sẽ chạy sau khi mount lần đầu
+    useEffect(() => {
+        completedRef.current.style.visibility = "hidden";
+    }, [])
 
     const loadModel = async () => {
         const detectorConfig = {
@@ -18,14 +46,25 @@ const Yoga = () => {
             detectorConfig
         );
         const poseClassifier = await tf.loadLayersModel(
-            "http://localhost:3000/models/model.json"
+            "./models/model.json"
         );
         console.log("loadmodel");
         // interval = setInterval(() => {
         //     predictWebcam(detector, poseClassifier)
         // }, 100);
-        predictWebcam(detector, poseClassifier);
+        
+        requestRef.current = requestAnimationFrame(() => {
+            predictWebcam(detector, poseClassifier);
+        })
     }
+
+    //Lấy model chung từ App component (chỉ load 1 lần duy nhất), nếu dùng trong Home vẫn load lại khi re-render home
+    //Vẫn gây vấn đề về hiệu suất
+    // useEffect(() => {
+    //     requestRef.current = requestAnimationFrame(() => {
+    //         predictWebcam(detector, poseClassifier);
+    //     })
+    // })
 
     const draw = (canvas, video, poses) => {
         canvas.width = video.videoWidth;
@@ -185,7 +224,26 @@ const Yoga = () => {
                 const processedInput = landmarks_to_embedding(input)
                 const classification = poseClassifier.predict(processedInput)
                 classification.array().then((data) => {
+                    const exerciseIndex = NO_CLASS.indexOf(exerciseName);
+                    //real
+
+                    if (data[0][exerciseIndex] > 0.97 && Boolean(flag.current) == false ) { //chưa bắt đầu, tập đúng động tác
+                        flag.current = true;
+                        startTimeRef.current = new Date();
+                    } else if (data[0][exerciseIndex] > 0.97 && flag.current == true) {   //đã bắt đầu, tập đúng động tác
+                        if (countdownRef.current > 0){
+                            countdownRef.current = countdownRef.current - (new Date() - startTimeRef.current);
+                            setCountdown((prev) => prev - (new Date() - startTimeRef.current));
+                            startTimeRef.current = new Date();  //very important
+                        } else {
+                            completedRef.current.style.visibility = "visible";
+                        }
+                    } else if (data[0][exerciseIndex] <= 0.97 && flag.current == true) {  //đã bắt đầu, tập sai động tác
+                        flag.current = false;
+                    }
+
                     for (let i = 0; i < 8; i++) {
+                        //test
                         if (data[0][i] > 0.97) {
                             console.log(NO_CLASS[i]);
                         }
@@ -193,13 +251,17 @@ const Yoga = () => {
                 })
             });
         }
-        requestAnimationFrame(() => {
+        requestRef.current = requestAnimationFrame(() => {
             predictWebcam(detector, poseClassifier);
         });
     }
 
     return (
         <div className='yoga-container'>
+            <Link to='/'>Home</Link>
+            <h1>{exerciseName}</h1>
+            <h2>Countdown: {countdown}</h2>
+            <div className="completed" ref={completedRef}>Completed!</div>
             <Webcam
                 width='640px'
                 height='480px'

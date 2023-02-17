@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import { handleNotification } from "../features/handleNotification";
 import { HOST } from "../App";
+import ExercisesList from "../components/ExercisesList";
 
 const Home = () => {
   const [alarm, setAlarm] = useState(moment());
@@ -60,6 +61,7 @@ const Home = () => {
       <button onClick={(e) => handleNotification(e)}>Notify</button>
       <Link to="/register">Register</Link>
       <Link to="/login">Login</Link>
+      <ExercisesList />
       <div className="alarms-container">
         <div className="alarms">
           <LocalizationProvider dateAdapter={AdapterMoment}>
