@@ -4,8 +4,10 @@ import Webcam from 'react-webcam';
 import { useRef, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 import { detector, poseClassifier } from '../App';
+import '../assets/css/yoga.css';
 
 let interval;
 
@@ -15,6 +17,11 @@ const Yoga = () => {
 
     const [ countdown, setCountdown ] = useState(20000);
     const countdownRef = useRef(20000);
+
+    const [accuracy, setAccuracy] = useState(0);
+
+    const playTimeRef = useRef();
+    const audioRef = useRef();
 
     //Không thể dùng useState (lý do ở component Test)
     // const [ isStart, setIsStart ] = useState(false);
@@ -35,6 +42,24 @@ const Yoga = () => {
     //dùng useEffect vì useEffect sẽ chạy sau khi mount lần đầu
     useEffect(() => {
         completedRef.current.style.visibility = "hidden";
+
+        //fetch sẵn tts
+        const context = new AudioContext();
+        fetch('https://api.fpt.ai/hmi/tts/v5', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'api-key': 'wluFDDV8bExklgwpEn6KFEKKvCkj3rpW',
+                'speed': '',
+                'voice': 'banmai'
+            },
+            body: 'Hãy đưa khuỷu tay của bạn cao lên một chút'
+        })
+            .then(res => res.json())
+            .then((json) => {
+                audioRef.current = new Audio(json.async);
+                audioRef.current.play();
+            })
     }, [])
 
     const loadModel = async () => {
@@ -227,12 +252,14 @@ const Yoga = () => {
                     const exerciseIndex = NO_CLASS.indexOf(exerciseName);
                     //real
 
+                    setAccuracy(data[0][exerciseIndex]);
                     if (data[0][exerciseIndex] > 0.97 && Boolean(flag.current) == false ) { //chưa bắt đầu, tập đúng động tác
                         flag.current = true;
                         startTimeRef.current = new Date();
                     } else if (data[0][exerciseIndex] > 0.97 && flag.current == true) {   //đã bắt đầu, tập đúng động tác
                         if (countdownRef.current > 0){
                             countdownRef.current = countdownRef.current - (new Date() - startTimeRef.current);
+                            //countdownRef giống với countdown nhưng dùng để so sánh, nếu lớn hơn 0 thì mới trừ tiếp
                             setCountdown((prev) => prev - (new Date() - startTimeRef.current));
                             startTimeRef.current = new Date();  //very important
                         } else {
@@ -242,10 +269,15 @@ const Yoga = () => {
                         flag.current = false;
                     }
 
+                    //Phát hướng dẫn bằng giọng nói
+                    if (data[0][exerciseIndex] > 0.8 && data[0][exerciseIndex] <= 0.97) {
+                        audioRef.current.play();
+                    }
+
+                    //test
                     for (let i = 0; i < 8; i++) {
-                        //test
                         if (data[0][i] > 0.97) {
-                            console.log(NO_CLASS[i]);
+                            //console.log(NO_CLASS[i]);
                         }
                     }
                 })
@@ -260,8 +292,9 @@ const Yoga = () => {
         <div className='yoga-container'>
             <Link to='/'>Home</Link>
             <h1>{exerciseName}</h1>
-            <h2>Countdown: {countdown}</h2>
+            <h2>Đếm ngược: {Math.floor(countdown/1000)} giây</h2>
             <div className="completed" ref={completedRef}>Completed!</div>
+            <h2>Độ chính xác: {Math.round(accuracy*100)} %</h2>
             <Webcam
                 width='640px'
                 height='480px'
@@ -275,7 +308,7 @@ const Yoga = () => {
                 height='480px'
             >
             </canvas>
-            <button onClick={loadModel}>RUN</button>
+            <Button size="large" variant="contained" onClick={loadModel}>RUN</Button>
         </div>
     );
 }

@@ -1,0 +1,10 @@
+.completed {
+    position: absolute;
+    top: 500px;
+    background-color: rgb(149, 224, 35);
+    width: 100vw;
+    font-size: 56px;
+    color:antiquewhite;
+    text-align: center;
+    z-index: 999;
+}
