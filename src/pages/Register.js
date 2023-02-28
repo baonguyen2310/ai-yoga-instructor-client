@@ -1,4 +1,5 @@
 import { HOST } from "../App";
+import '../assets/css/user.css';
 
 const Register = () => {
     const handleRegister = () => {
@@ -29,9 +30,11 @@ const Register = () => {
 
     return (
         <div className="register">
+            <p>Tài khoản:</p>
             <input placeholder="username" className="username_input"></input>
+            <p>Mật khẩu:</p>
             <input placeholder="password" className="password_input"></input>
-            <button onClick={handleRegister}>Register</button>
+            <button onClick={handleRegister}>Đăng ký</button>
         </div>
     )
 }

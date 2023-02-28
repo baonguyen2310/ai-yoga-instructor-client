@@ -1,0 +1,30 @@
+.register, .login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh
+}
+
+.register button, .login button {
+    font-size: 24px;
+    background-color: rgb(92, 161, 138);
+    color:aliceblue;
+    margin-top: 16px;
+    border: none;
+    border-radius: 10px;
+    padding: 8px
+}
+
+.register p, .login p {
+    font-size: 16px
+}
+
+.username_input, .password_input {
+    font-size: 24px;
+    background-color: aliceblue;
+    color:black;
+    border: none;
+    border-radius: 10px;
+    padding: 8px;
+    outline: none;
+}

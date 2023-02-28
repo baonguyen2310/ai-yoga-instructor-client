@@ -57,16 +57,59 @@ const Home = () => {
 
   return (
     <div className="Home">
-      <h2>AI Yoga Instructor</h2>
-      <button onClick={(e) => handleNotification(e)}>Notify</button>
-      <Link to="/register">Register</Link>
-      <Link to="/login">Login</Link>
+      <h1>Huấn luyện viên Yoga AI</h1>
+      <nav style={{ flexDirection: 'column', marginLeft: 5}}>
+        <button
+          style={{
+            fontSize: "24px",
+            border: "none",
+            backgroundColor: "#FD8A8A",
+            color: "white",
+            marginRight: 10,
+            height: '40px',
+            cursor: 'pointer'
+          }}
+          onClick={(e) => handleNotification(e)}
+        >
+          Thông báo ⏰
+        </button>
+        <Link to="/register">
+          <button
+            style={{
+              fontSize: "24px",
+              border: "none",
+              backgroundColor: "#FD8A8A",
+              color: "white",
+              marginRight: 10,
+              height: '40px',
+              cursor: 'pointer'
+            }}
+          >
+            Đăng ký
+          </button>
+        </Link>
+        <Link to="/login">
+        <button
+            style={{
+              fontSize: "24px",
+              border: "none",
+              backgroundColor: "#FD8A8A",
+              color: "white",
+              marginRight: 10,
+              height: '40px',
+              cursor: 'pointer'
+            }}
+          >
+            Đăng nhập
+          </button>
+        </Link>
+      </nav>
       <ExercisesList />
       <div className="alarms-container">
         <div className="alarms">
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <TimePicker
-              label="Morning"
+              label="Hẹn giờ tập"
               value={alarm}
               onChange={(newValue) => handleAlarm(newValue)}
               renderInput={(params) => <TextField {...params} />}

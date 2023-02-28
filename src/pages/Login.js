@@ -30,9 +30,11 @@ const Login = () => {
 
   return (
     <div className="login">
+      <p>Tài khoản:</p>
       <input placeholder="username" className="username_input"></input>
+      <p>Mật khẩu:</p>
       <input placeholder="password" className="password_input"></input>
-      <button onClick={handleLogin}>Login</button>
+      <button onClick={handleLogin}>Đăng nhập</button>
     </div>
   );
 };

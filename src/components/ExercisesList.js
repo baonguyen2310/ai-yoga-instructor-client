@@ -15,7 +15,13 @@ const listExercisesName = [
 const Exercise = (props) => {
   const href = `./images/${props.title}.webp`;
   return (
-    <Link className="exercise" to="/yoga" state={{ exerciseName: props.title }}>
+    // <Link className="exercise" to="/yoga" state={{ exerciseName: props.title }}>
+    //   <div className="exercise-header">
+    //     <h2>{props.title}</h2>
+    //   </div>
+    //   <img src={href} alt={props.title} className="exercise-img" />
+    // </Link>
+    <Link className="exercise" to={`/yogaapp?name=${props.title}`}>
       <div className="exercise-header">
         <h2>{props.title}</h2>
       </div>

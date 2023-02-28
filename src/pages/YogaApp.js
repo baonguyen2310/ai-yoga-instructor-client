@@ -294,14 +294,9 @@ const YogaApp = () => {
         });
     }
 
-    const containerRef = useRef();
-    useEffect(() => {
-        containerRef.current.scrollTop = containerRef.current.scrollHeight;
-    }, [])
-
     return (
-        <div ref={containerRef} className='yoga-container'>
-            <h1 style={{fontSize: '40px', marginTop: "30vh"}}>{exerciseName}</h1>
+        <div className='yoga-container' style={{width: '100%'}}>
+            <h1 style={{fontSize: '40px'}}>{exerciseName}</h1>
             <h2 style={{fontSize: '40px'}}>Đếm ngược: {Math.floor(countdown/1000)} giây</h2>
             <div className="completed" ref={completedRef}>Completed!</div>
             <h2 style={{fontSize: '40px'}}>Độ chính xác: {Math.round(accuracy*100)} %</h2>
@@ -309,12 +304,13 @@ const YogaApp = () => {
             <canvas
                 ref={canvasRef}
                 id="my-canvas"
-                width='480px'
+                width='100%'
                 height='640px'
             >
             </canvas>
             <Webcam
-                width='480px'
+                muted={false}
+                width='100%'
                 height='640px'
                 id="webcam"
                 ref={webcamRef}
