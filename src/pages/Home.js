@@ -18,8 +18,8 @@ const Home = () => {
     setChecked(!checked);
     const newChecked = !checked; //dùng biến tạm vì checked vẫn chưa chắc được set
     const data = {
-      checked: newChecked,
-      alarm: alarm.toDate(),
+      checked1: newChecked,
+      alarm1: alarm.toDate(),
     };
     console.log(data);
 
@@ -50,8 +50,8 @@ const Home = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setAlarm(moment(data.alarm));
-        setChecked(data.checked);
+        setAlarm(moment(data.alarm1));
+        setChecked(data.checked1);
       });
   }, []);
 

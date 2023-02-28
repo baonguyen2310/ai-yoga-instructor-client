@@ -58,7 +58,6 @@ const Yoga = () => {
             .then(res => res.json())
             .then((json) => {
                 audioRef.current = new Audio(json.async);
-                audioRef.current.play();
             })
     }, [])
 

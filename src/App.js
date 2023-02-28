@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Yoga from './pages/Yoga';
+import YogaApp from './pages/YogaApp';
 import Test from './components/Test';
 import { useEffect } from 'react';
 
@@ -13,8 +14,8 @@ import * as poseDetection from '@tensorflow-models/pose-detection';
 let detector;
 let poseClassifier;
 
-const HOST = "http://localhost:5000";
-//const HOST = "https://medicine-keeper-server.onrender.com";
+//const HOST = "http://localhost:5000";
+const HOST = "https://medicine-keeper-server-production.up.railway.app";
 export {HOST};
 
 const App = () => {
@@ -45,6 +46,7 @@ const App = () => {
                 <Route path='/register' element={<Register />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/yoga' element={<Yoga />} />
+                <Route path='/yogaapp' element={<YogaApp />} />
                 <Route path='/test' element={<Test />} />
             </Routes>
         </Router>

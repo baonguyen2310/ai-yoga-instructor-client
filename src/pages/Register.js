@@ -6,7 +6,8 @@ const Register = () => {
         const passwordInput = document.querySelector(".password_input");
         const data = {
             username: usernameInput.value,
-            password: passwordInput.value
+            password: passwordInput.value,
+            ESPCODE: "yoga-ai"
         }
         fetch(`${HOST}/register`, {
             method: 'POST',
