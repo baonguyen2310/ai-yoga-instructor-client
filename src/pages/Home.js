@@ -1,4 +1,5 @@
 import Switch from "@mui/material/Switch";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
@@ -9,6 +10,7 @@ import moment from "moment";
 import { handleNotification } from "../features/handleNotification";
 import { HOST } from "../App";
 import ExercisesList from "../components/ExercisesList";
+import "../assets/css/home.css";
 
 const Home = () => {
   const [alarm, setAlarm] = useState(moment());
@@ -57,55 +59,22 @@ const Home = () => {
 
   return (
     <div className="Home">
-      <h1>Huấn luyện viên Yoga AI</h1>
-      <nav style={{ flexDirection: 'column', marginLeft: 5}}>
-        <button
-          style={{
-            fontSize: "24px",
-            border: "none",
-            backgroundColor: "#FD8A8A",
-            color: "white",
-            marginRight: 10,
-            height: '40px',
-            cursor: 'pointer'
-          }}
-          onClick={(e) => handleNotification(e)}
-        >
-          Thông báo ⏰
-        </button>
-        <Link to="/register">
-          <button
-            style={{
-              fontSize: "24px",
-              border: "none",
-              backgroundColor: "#FD8A8A",
-              color: "white",
-              marginRight: 10,
-              height: '40px',
-              cursor: 'pointer'
-            }}
-          >
-            Đăng ký
+      <nav className="navbar">
+        <img src="./logo.png" alt="" className="logo-img" />
+        <div className="navlist">
+          <button className="notify-btn" onClick={(e) => handleNotification(e)}>
+            <NotificationsIcon className="notify-icon" />
           </button>
-        </Link>
-        <Link to="/login">
-        <button
-            style={{
-              fontSize: "24px",
-              border: "none",
-              backgroundColor: "#FD8A8A",
-              color: "white",
-              marginRight: 10,
-              height: '40px',
-              cursor: 'pointer'
-            }}
-          >
-            Đăng nhập
-          </button>
-        </Link>
+          <Link to="/register" className="register-link">
+            <button className="register-btn">Đăng ký</button>
+          </Link>
+          <Link to="/login" className="login-link">
+            <button className="login-btn">Đăng nhập</button>
+          </Link>
+        </div>
       </nav>
-      <ExercisesList />
       <div className="alarms-container">
+        <h2>Hẹn giờ tập</h2>
         <div className="alarms">
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <TimePicker
@@ -122,6 +91,7 @@ const Home = () => {
           />
         </div>
       </div>
+      <ExercisesList />
     </div>
   );
 };

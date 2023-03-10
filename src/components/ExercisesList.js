@@ -1,11 +1,21 @@
 import { Link } from "react-router-dom";
 import "../assets/css/exercise.css";
 
+// const listExercisesName = [
+//   "Chair",
+//   "Cobra",
+//   "Dog",
+//   "No_Pose",
+//   "Shoulderstand",
+//   "Traingle",
+//   "Tree",
+//   "Warrior",
+// ];
+
 const listExercisesName = [
   "Chair",
   "Cobra",
   "Dog",
-  "No_Pose",
   "Shoulderstand",
   "Traingle",
   "Tree",
@@ -13,7 +23,7 @@ const listExercisesName = [
 ];
 
 const Exercise = (props) => {
-  const href = `./images/${props.title}.webp`;
+  const href = `./images/${props.title}.jpg`;
   return (
     // <Link className="exercise" to="/yoga" state={{ exerciseName: props.title }}>
     //   <div className="exercise-header">
@@ -42,7 +52,7 @@ const ExercisesList = () => {
   return (
     <div className="exercises-list-container">
       <div className="exercises-list-header">
-        <h1>Exercises List</h1>
+        {/* <h1>Exercises List</h1> */}
       </div>
       <ul className="exercises-list">{listExercisesItem}</ul>
     </div>

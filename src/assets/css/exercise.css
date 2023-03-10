@@ -2,7 +2,28 @@
     list-style-type: none;
     display: flex;
     flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
 }
+
+.exercise-item {
+    margin: 1rem;
+    padding: 0;
+}
+
+@media only screen and (max-width: 1920px) {
+    .exercise-item {
+        width: 30%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .exercise-item {
+        width: 100%;
+    }
+}
+
+
 
 .exercise-item:hover {
     cursor: pointer;
@@ -10,7 +31,20 @@
 }
 
 .exercise {
-    width: '100vw'
+    text-decoration: none;
+    position: relative;
+}
+
+.exercise h2 {
+    background-color: #333;
+}
+
+.exercise:link {
+    color: tomato;
+}
+
+.exercise:visited {
+    color: tomato;
 }
 
 .exercise-img {

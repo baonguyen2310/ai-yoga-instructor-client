@@ -1,0 +1,106 @@
+/* body {
+    background-color: rgb(245, 198, 189);
+} */
+
+.home {
+
+}
+
+.navbar {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    height: 12vh;
+}
+
+@media only screen and (max-width: 1920px) {
+    .logo-img {
+        width: 20%;
+        height: 100%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .logo-img {
+        width: 46%;
+        height: 100%;
+    }
+}
+
+.navlist {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #333;
+    height: 100%;
+}
+
+.notify-btn {
+    display: block;
+    text-align: center;
+    padding: 14px 16px;
+    background-color: #333;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    height: 100%;
+    color: #f2f2f2;
+}
+
+.notify-btn:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.notify-btn:hover .notify-icon {
+    font-size: 2rem;
+}
+
+.register-link {
+    display: block;
+    text-align: center;
+    height: 100%;
+}
+
+.login-link {
+    display: block;
+    text-align: center;
+    height: 100%;
+}
+
+
+.register-btn {
+    background-color: #333;
+    border: none;
+    cursor: pointer;
+    height: 100%;
+    color: #f2f2f2;
+}
+
+.login-btn {
+    background-color: #333;
+    border: none;
+    cursor: pointer;
+    height: 100%;
+    color: #f2f2f2;
+}
+
+.register-btn:hover, .login-btn:hover {
+    background-color: #ddd;
+    color: black;
+    font-size: 1.5rem;
+}
+
+.alarms-container {
+    margin: 1rem;
+}
+
+.alarms-container h2 {
+    color: #325460;
+}
