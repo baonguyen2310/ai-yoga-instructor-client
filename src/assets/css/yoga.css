@@ -10,14 +10,17 @@
     justify-content: space-around;
     width: 100%;
     background-color: #333;
+    z-index: 1003;
 }
 
 .yoga-header p {
     color: white;
+    z-index: 1003;
 }
 
 .yoga-header h2 {
     color: tomato;
+    z-index: 1003;
 }
 
 .completed {
@@ -31,54 +34,109 @@
     z-index: 999;
 }
 
-.run-btn {
+@media only screen and (max-width: 1920px) {
+    .canvas {
+        position: absolute;
+        left: 0;
+        top: -16%;
+        width: 100%;
+        z-index: 1;
+        scale: 0.6;
+    }
+    
+    .webcam {
+        position: absolute;
+        left: 0;
+        top: -16%;
+        width: 100%;
+        scale: 0.6;
+    }
+
+    .tutorial {
+        position: absolute;
+        right: 0;
+        color: tomato;
+    }
+    
+    .tutorial-iframe {
+        position: absolute;
+        right: 0;
+        z-index: 1001;
+        height: 50%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .canvas {
+        position: absolute;
+        left: 0;
+        top: 0%;
+        width: 100%;
+        z-index: 1;
+        scale: 1;
+    }
+    
+    .webcam {
+        position: absolute;
+        left: 0;
+        top: 0%;
+        width: 100%;
+        scale: 1;
+    }
+
+    .tutorial {
+        position: absolute;
+        right: 0;
+        color: tomato;
+    }
+    
+    .tutorial-iframe {
+        position: absolute;
+        right: 0;
+        z-index: 1001;
+        height: 50%;
+    }
+}
+
+.yoga-footer {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1002;
+}
+
+.run-btn, .tutorial-btn {
     background-color: #000;
     color: tomato;
     font-size: large;
-    padding: 1rem 2rem;
+    padding: 1rem;
+    cursor: pointer;
 }
 
-.run-btn:hover {
+.run-btn:hover, .tutorial-btn:hover {
     background-color: #ccc;
     color: black;
 }
 
-.canvas {
-    position: absolute;
-    left: 0;
-    top: 30%;
+.audio-controls {
+    flex: 1;
+    height: 100%;
     width: 100%;
-    z-index: 1001;
-}
-
-.webcam {
-    position: absolute;
-    left: 0;
-    top: 30%;
-    width: 100%;
-}
-
-.tutorial {
-    position: absolute;
-    bottom: 26%;
-    color: tomato;
-}
-
-.audio-container {
+    background-color: #000;
     display: flex;
-    align-items: center;
-    padding-top: 1rem;
-    position: absolute;
-    bottom: 0%;
-    width: 100vw;
-    background-image: linear-gradient(102.4deg, rgb(253, 189, 85) 7.8%, rgb(249, 131, 255) 100.3%);
 }
 
-.audio-container svg {
+.audio-controls svg {
+    color: tomato;
     margin: 1rem;
     font-size: 1.6rem;
+    cursor: pointer;
+    height: 100%;
+    flex: 1;
 }
 
-.audio-container svg:hover {
-    font-size: 2rem;
+.audio-controls svg:hover {
+    background-color: #ccc;
+    color: black;
 }

@@ -67,6 +67,8 @@ const tutorialLink = {
 
 let interval;
 
+let colorStroke = "gray";
+
 // A custom hook that builds on useLocation to parse
 // the query string for you.
 function useQuery() {
@@ -162,7 +164,7 @@ const YogaApp = () => {
       const y = poses[0].keypoints[i].y;
       ctx.beginPath();
       ctx.arc(x, y, 5, 0, 2 * Math.PI);
-      ctx.fillStyle = "gray";
+      ctx.fillStyle = colorStroke;
       ctx.fill();
       ctx.stroke();
     }
@@ -324,6 +326,7 @@ const YogaApp = () => {
           setAccuracy(data[0][exerciseIndex]);
           if (data[0][exerciseIndex] > 0.97 && Boolean(flag.current) == false) {
             //chưa bắt đầu, tập đúng động tác
+            colorStroke = "green";
             flag.current = true;
             startTimeRef.current = new Date();
           } else if (data[0][exerciseIndex] > 0.97 && flag.current == true) {
@@ -341,11 +344,12 @@ const YogaApp = () => {
             }
           } else if (data[0][exerciseIndex] <= 0.97 && flag.current == true) {
             //đã bắt đầu, tập sai động tác
+            colorStroke = "gray";
             flag.current = false;
           }
 
           //Phát hướng dẫn bằng giọng nói
-          if (data[0][exerciseIndex] > 0.8 && data[0][exerciseIndex] <= 0.97) {
+          if (data[0][exerciseIndex] > 0.85 && data[0][exerciseIndex] <= 0.9) {
             audioRef.current.play();
           }
 
@@ -369,18 +373,12 @@ const YogaApp = () => {
         <p>
           Tên động tác:
           <h2>{exerciseName}</h2>
-          <button
-            className="run-btn"
-            onClick={() => {
-              loadModel();
-            }}
-          >
-            RUN
-          </button>
+          
         </p>
         <p>
           Đếm ngược:
           <h2>{Math.floor(countdown / 1000)} giây</h2>
+          
         </p>
         <div className="completed" ref={completedRef}>
           Completed!
@@ -391,28 +389,61 @@ const YogaApp = () => {
           <CircularProgressWithLabel value={accuracy * 100} />
         </p>
       </header>
-
+      <footer className="yoga-footer">
+      <button
+            className="run-btn"
+            onClick={() => {
+              loadModel();
+            }}
+          >
+            RUN
+          </button>
+          <button
+            className="tutorial-btn"
+            onClick={() => {
+                if (document.getElementById("myTutorial").style.display == "none") {
+                    document.getElementById("myTutorial").style.display = "block";
+                } else {
+                    document.getElementById("myTutorial").style.display = "none";
+                }
+            }}
+          >
+            HƯỚNG DẪN
+          </button>
+          <div className="audio-controls">
+            <PlayArrowIcon
+              className="audio-icon"
+              onClick={() => {
+                document.getElementById("myAudio").play();
+              }}
+            />
+            <PauseIcon
+              className="audio-icon"
+              onClick={() => {
+                document.getElementById("myAudio").pause();
+              }}
+            />
+          </div>
+      </footer>
       <canvas ref={canvasRef} id="my-canvas" className="canvas"></canvas>
       <Webcam muted={false} id="webcam" ref={webcamRef} className="webcam" />
-      <h2 className="tutorial">Hướng dẫn:</h2>
-      <iframe
-        style={{ position: "absolute", bottom: "10%" }}
-        width="100%"
-        src={tutorialLink[exerciseName]}
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-      ></iframe>
-      <audio autoPlay="autoplay" id="myAudio">
-        <source src="./yoga.mp3" />
-      </audio>
-      <div className="audio-container">
-        <PlayArrowIcon className="audio-icon" onClick={() => {
-            document.getElementById("myAudio").play();
-        }} />
-        <PauseIcon className="audio-icon" onClick={() => {
-            document.getElementById("myAudio").pause();
-        }} />
+      <div className="media-container">
+        <div className="tutorial-container" id="myTutorial">
+          <h2 className="tutorial">Hướng dẫn:</h2>
+          <iframe
+            className="tutorial-iframe"
+            width="100%"
+            src={tutorialLink[exerciseName]}
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div className="audio-container">
+          <audio autoPlay="autoplay" id="myAudio">
+            <source src="./yoga.mp3" />
+          </audio>
+        </div>
       </div>
     </div>
   );
