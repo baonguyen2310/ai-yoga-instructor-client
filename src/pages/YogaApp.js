@@ -85,7 +85,8 @@ const YogaApp = () => {
 
   const [accuracy, setAccuracy] = useState(0);
 
-  const playTimeRef = useRef();
+  const voiceRef = useRef(false);
+  const playTimeRef = useRef(new Date());
   const audioRef = useRef();
 
   //Không thể dùng useState (lý do ở component Test)
@@ -109,21 +110,21 @@ const YogaApp = () => {
     completedRef.current.style.visibility = "hidden";
 
     //fetch sẵn tts
-    const context = new AudioContext();
-    fetch("https://api.fpt.ai/hmi/tts/v5", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": "wluFDDV8bExklgwpEn6KFEKKvCkj3rpW",
-        speed: "",
-        voice: "banmai",
-      },
-      body: "Hãy đưa khuỷu tay của bạn cao lên một chút",
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        audioRef.current = new Audio(json.async);
-      });
+    //   const context = new AudioContext();
+    //   fetch("https://api.fpt.ai/hmi/tts/v5", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "api-key": "wluFDDV8bExklgwpEn6KFEKKvCkj3rpW",
+    //       speed: "",
+    //       voice: "banmai",
+    //     },
+    //     body: "Trọng tâm cơ thể của bạn hơi thấp",
+    //   })
+    //     .then((res) => res.json())
+    //     .then((json) => {
+    //       audioRef.current = new Audio(json.async);
+    //     });
   }, []);
 
   const loadModel = async () => {
@@ -163,7 +164,7 @@ const YogaApp = () => {
       const x = poses[0].keypoints[i].x;
       const y = poses[0].keypoints[i].y;
       ctx.beginPath();
-      ctx.arc(x, y, 5, 0, 2 * Math.PI);
+      ctx.arc(x, y, 10, 0, 2 * Math.PI);
       ctx.fillStyle = colorStroke;
       ctx.fill();
       ctx.stroke();
@@ -194,6 +195,8 @@ const YogaApp = () => {
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = colorStroke;
       ctx.stroke();
     }
   };
@@ -340,7 +343,10 @@ const YogaApp = () => {
               );
               startTimeRef.current = new Date(); //very important
             } else {
-              completedRef.current.style.visibility = "visible";
+              if ((completedRef.current.style.visibility = "hidden")) {
+                completedRef.current.style.visibility = "visible";
+                document.getElementById("completedAudio").play();
+              }
             }
           } else if (data[0][exerciseIndex] <= 0.97 && flag.current == true) {
             //đã bắt đầu, tập sai động tác
@@ -349,8 +355,18 @@ const YogaApp = () => {
           }
 
           //Phát hướng dẫn bằng giọng nói
-          if (data[0][exerciseIndex] > 0.85 && data[0][exerciseIndex] <= 0.9) {
-            audioRef.current.play();
+          if (
+            data[0][exerciseIndex] > 0.85 &&
+            data[0][exerciseIndex] <= 0.9 &&
+            voiceRef.current == true &&
+            new Date() - playTimeRef.current > 10000
+          ) {
+            //audioRef.current.play();
+            const arrayVoice = document.getElementsByClassName("voice");
+            const randomVoice =
+              arrayVoice[Math.floor(Math.random() * arrayVoice.length)];
+            randomVoice.play();
+            playTimeRef.current = new Date();
           }
 
           //test
@@ -373,12 +389,10 @@ const YogaApp = () => {
         <p>
           Tên động tác:
           <h2>{exerciseName}</h2>
-          
         </p>
         <p>
           Đếm ngược:
           <h2>{Math.floor(countdown / 1000)} giây</h2>
-          
         </p>
         <div className="completed" ref={completedRef}>
           Completed!
@@ -390,40 +404,48 @@ const YogaApp = () => {
         </p>
       </header>
       <footer className="yoga-footer">
-      <button
-            className="run-btn"
+        <button
+          className="run-btn"
+          onClick={() => {
+            loadModel();
+          }}
+        >
+          RUN
+        </button>
+        <button
+          className="tutorial-btn"
+          onClick={() => {
+            if (document.getElementById("myTutorial").style.display == "none") {
+              document.getElementById("myTutorial").style.display = "block";
+            } else {
+              document.getElementById("myTutorial").style.display = "none";
+            }
+          }}
+        >
+          HƯỚNG DẪN
+        </button>
+        <button
+          className="tutorial-btn"
+          onClick={() => {
+            voiceRef.current = !voiceRef.current;
+          }}
+        >
+          VOICE AI
+        </button>
+        <div className="audio-controls">
+          <PlayArrowIcon
+            className="audio-icon"
             onClick={() => {
-              loadModel();
+              document.getElementById("myAudio").play();
             }}
-          >
-            RUN
-          </button>
-          <button
-            className="tutorial-btn"
+          />
+          <PauseIcon
+            className="audio-icon"
             onClick={() => {
-                if (document.getElementById("myTutorial").style.display == "none") {
-                    document.getElementById("myTutorial").style.display = "block";
-                } else {
-                    document.getElementById("myTutorial").style.display = "none";
-                }
+              document.getElementById("myAudio").pause();
             }}
-          >
-            HƯỚNG DẪN
-          </button>
-          <div className="audio-controls">
-            <PlayArrowIcon
-              className="audio-icon"
-              onClick={() => {
-                document.getElementById("myAudio").play();
-              }}
-            />
-            <PauseIcon
-              className="audio-icon"
-              onClick={() => {
-                document.getElementById("myAudio").pause();
-              }}
-            />
-          </div>
+          />
+        </div>
       </footer>
       <canvas ref={canvasRef} id="my-canvas" className="canvas"></canvas>
       <Webcam muted={false} id="webcam" ref={webcamRef} className="webcam" />
@@ -442,6 +464,18 @@ const YogaApp = () => {
         <div className="audio-container">
           <audio autoPlay="autoplay" id="myAudio">
             <source src="./yoga.mp3" />
+          </audio>
+          <audio id="completedAudio">
+            <source src="./completed.mp3" />
+          </audio>
+          <audio className="voice">
+            <source src="./voice1.mp3" />
+          </audio>
+          <audio className="voice">
+            <source src="./voice2.mp3" />
+          </audio>
+          <audio className="voice">
+            <source src="./voice3.mp3" />
           </audio>
         </div>
       </div>
