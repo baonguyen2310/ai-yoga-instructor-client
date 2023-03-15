@@ -67,6 +67,48 @@ const tutorialLink = {
 
 let interval;
 
+//MATH SUPPORT
+//Vector AB từ 2 điểm A và B
+const vector = (point1, point2) => {
+  const x1 = point1.x;
+  const y1 = point1.y;
+  const x2 = point2.x;
+  const y2 = point2.y;
+
+  return {
+    x: x2 - x1,
+    y: y2 - y1
+  };
+};
+//Độ dài vector AB
+const distance = (vector) => {
+  const x = vector.x;
+  const y = vector.y;
+  return Math.sqrt(x * x + y * y);
+};
+//Góc giữa 2 vector AB và CD
+const degree2Vector = (vector1, vector2) => {
+  const x1 = vector1.x;
+  const y1 = vector1.y;
+  const x2 = vector2.x;
+  const y2 = vector2.y;
+  
+  return (
+    (Math.acos(
+      (x1 * x2 + y1 * y2) /
+        (distance(vector1) * distance(vector2))
+    ) *
+      180) /
+    Math.PI
+  );
+};
+//Góc giữa 3 điểm
+const degree3Point = (pointA, pointB, pointC) => {
+  const vectorAB = vector(pointA, pointB);
+  const vectorBC = vector(pointB, pointC);
+  return degree2Vector(vectorAB, vectorBC);
+};
+
 let colorStroke = "gray";
 
 // A custom hook that builds on useLocation to parse
@@ -135,8 +177,7 @@ const YogaApp = () => {
       poseDetection.SupportedModels.MoveNet,
       detectorConfig
     );
-    
-    
+
     // interval = setInterval(() => {
     //     predictWebcam(detector, poseClassifier)
     // }, 100);
@@ -147,6 +188,59 @@ const YogaApp = () => {
     console.log(samplePoses);
     const sampleCanvas = document.getElementById("sampleCanvas");
     drawSampleImage(sampleCanvas, sampleImage, samplePoses);
+
+    const triplePoints = [
+      [10, 8, 6],
+      [8, 6, 5],
+      [6, 5, 7],
+      [5, 7, 9],
+      [8, 6, 12],
+      [12, 6, 5],
+      [7, 5, 11],
+      [11, 5, 6],
+      [6, 12, 1],
+      [5, 11, 12],
+      [6, 12, 14],
+      [5, 11, 13],
+      [14, 12, 11],
+      [13, 11, 12],
+      [12, 14, 16],
+      [11, 13, 15]
+    ];
+
+    const degree3Points = [];
+
+    for (let i = 0; i < triplePoints.length; i++){
+      const pointA = samplePoses[0].keypoints[triplePoints[i][0]];
+      const pointB = samplePoses[0].keypoints[triplePoints[i][1]];
+      const pointC = samplePoses[0].keypoints[triplePoints[i][2]];
+      degree3Points.push(degree3Point(pointA, pointB, pointC));
+    }
+
+    console.log(degree3Points);
+
+    //TEST IMAGE
+    const testImage = document.getElementById("testImage");
+    const testPoses = await detector.estimatePoses(testImage);
+    console.log(testPoses);
+    const testCanvas = document.getElementById("testCanvas");
+    drawSampleImage(testCanvas, testImage, testPoses);
+
+    const degree3PointsTest = [];
+
+    for (let i = 0; i < triplePoints.length; i++){
+      const pointA = testPoses[0].keypoints[triplePoints[i][0]];
+      const pointB = testPoses[0].keypoints[triplePoints[i][1]];
+      const pointC = testPoses[0].keypoints[triplePoints[i][2]];
+      degree3PointsTest.push(degree3Point(pointA, pointB, pointC));
+    }
+
+    console.log(degree3PointsTest);
+
+    for (let i = 0; i < degree3Points.length; i++) {
+      console.log(degree3PointsTest[i] - degree3Points[i]);
+    }
+
 
     //TẠM ĐÓNG PREDICTWEBCAM
     //const poseClassifier = await tf.loadLayersModel("./models/model.json");
@@ -169,33 +263,44 @@ const YogaApp = () => {
     canvas.height = image.height;
     const ctx = canvas.getContext("2d");
     ctx.drawImage(image, 0, 0);
-    for (let i = 0; i < 17; i++){
-        const x = poses[0].keypoints[i].x;
-        const y = poses[0].keypoints[i].y;
-        ctx.beginPath();
-        ctx.arc(x, y, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = "gray";
-        ctx.fill();
-        ctx.stroke();
+    for (let i = 0; i < 17; i++) {
+      const x = poses[0].keypoints[i].x;
+      const y = poses[0].keypoints[i].y;
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, 2 * Math.PI);
+      ctx.fillStyle = "gray";
+      ctx.fill();
+      ctx.stroke();
     }
     const couplePoints = [
-        [0,1],[0,2],[1,3],[2,4],
-        [5,6],[6,8],[8,10],[5,7],[7,9],
-        [6,12],[12,14],[14,16],
-        [5,11],[11,13],[13,15],[11,12]
-    ]
-    for(let i = 0; i < couplePoints.length; i++){
-        const x1 = poses[0].keypoints[couplePoints[i][0]].x;
-        const y1 = poses[0].keypoints[couplePoints[i][0]].y;
-        const x2 = poses[0].keypoints[couplePoints[i][1]].x;
-        const y2 = poses[0].keypoints[couplePoints[i][1]].y;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
+      [0, 1],
+      [0, 2],
+      [1, 3],
+      [2, 4],
+      [5, 6],
+      [6, 8],
+      [8, 10],
+      [5, 7],
+      [7, 9],
+      [6, 12],
+      [12, 14],
+      [14, 16],
+      [5, 11],
+      [11, 13],
+      [13, 15],
+      [11, 12],
+    ];
+    for (let i = 0; i < couplePoints.length; i++) {
+      const x1 = poses[0].keypoints[couplePoints[i][0]].x;
+      const y1 = poses[0].keypoints[couplePoints[i][0]].y;
+      const x2 = poses[0].keypoints[couplePoints[i][1]].x;
+      const y2 = poses[0].keypoints[couplePoints[i][1]].y;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
     }
-  
-  }
+  };
 
   const draw = (canvas, video, poses) => {
     canvas.width = video.videoWidth;
@@ -490,8 +595,19 @@ const YogaApp = () => {
           />
         </div>
       </footer>
-      <canvas ref={canvasRef} id="my-canvas" className="canvas"></canvas>
-      <Webcam muted={false} id="webcam" ref={webcamRef} className="webcam" />
+      <canvas
+        ref={canvasRef}
+        id="my-canvas"
+        className="canvas"
+        style={{ visibility: "hidden" }}
+      ></canvas>
+      <Webcam
+        muted={false}
+        id="webcam"
+        ref={webcamRef}
+        className="webcam"
+        style={{ visibility: "hidden" }}
+      />
       <div className="media-container">
         <div className="tutorial-container" id="myTutorial">
           <h2 className="tutorial">Hướng dẫn:</h2>
@@ -522,10 +638,12 @@ const YogaApp = () => {
           </audio>
         </div>
       </div>
-      {/* <img src="./images/Tree.jpg" id="sampleImage"/>
-      <canvas id="sampleCanvas" width="750" height="500" /> */}
+      <img src="./images/Tree.jpg" id="sampleImage" />
+      <canvas id="sampleCanvas" width="750" height="500" />
+      <img src="./images/Tree3.jpg" id="testImage" />
+      <canvas id="testCanvas" width="750" height="500" />
 
-      <iframe
+      {/* <iframe
         src="https://codesandbox.io/embed/upload-widget-react-forked-8xjvyk?fontsize=14&hidenavigation=1&theme=dark"
         style={{
           width: "100%",
@@ -538,7 +656,7 @@ const YogaApp = () => {
         title="upload widget react (forked)"
         allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
         sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-      />
+      /> */}
     </div>
   );
 };
