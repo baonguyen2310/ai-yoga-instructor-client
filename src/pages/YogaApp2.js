@@ -109,6 +109,25 @@ const degree3Point = (pointA, pointB, pointC) => {
   return degree2Vector(vectorAB, vectorBC);
 };
 
+const triplePoints = [
+  [10, 8, 6],
+  [8, 6, 5],
+  [6, 5, 7],
+  [5, 7, 9],
+  [8, 6, 12],
+  [12, 6, 5],
+  [7, 5, 11],
+  [11, 5, 6],
+  [6, 12, 1],
+  [5, 11, 12],
+  [6, 12, 14],
+  [5, 11, 13],
+  [14, 12, 11],
+  [13, 11, 12],
+  [12, 14, 16],
+  [11, 13, 15]
+];
+
 let colorStroke = "gray";
 
 // A custom hook that builds on useLocation to parse
@@ -189,25 +208,6 @@ const YogaApp = () => {
     const sampleCanvas = document.getElementById("sampleCanvas");
     drawSampleImage(sampleCanvas, sampleImage, samplePoses);
 
-    const triplePoints = [
-      [10, 8, 6],
-      [8, 6, 5],
-      [6, 5, 7],
-      [5, 7, 9],
-      [8, 6, 12],
-      [12, 6, 5],
-      [7, 5, 11],
-      [11, 5, 6],
-      [6, 12, 1],
-      [5, 11, 12],
-      [6, 12, 14],
-      [5, 11, 13],
-      [14, 12, 11],
-      [13, 11, 12],
-      [12, 14, 16],
-      [11, 13, 15]
-    ];
-
     const degree3Points = [];
 
     for (let i = 0; i < triplePoints.length; i++){
@@ -220,11 +220,11 @@ const YogaApp = () => {
     console.log(degree3Points);
 
     //TEST IMAGE
+    /*
     const testImage = document.getElementById("testImage");
     const testPoses = await detector.estimatePoses(testImage);
     console.log(testPoses);
     const testCanvas = document.getElementById("testCanvas");
-    drawSampleImage(testCanvas, testImage, testPoses);
 
     const degree3PointsTest = [];
 
@@ -236,18 +236,24 @@ const YogaApp = () => {
     }
 
     console.log(degree3PointsTest);
-
+    const errorPoints = [];
     for (let i = 0; i < degree3Points.length; i++) {
       console.log(degree3PointsTest[i] - degree3Points[i]);
+      if (Math.abs(degree3PointsTest[i] - degree3Points[i]) > 10){
+        errorPoints.push(triplePoints[i][1]);
+      }
     }
+    console.log(errorPoints);
 
+    drawTestImage(testCanvas, testImage, testPoses, errorPoints);
+    */
 
     //TẠM ĐÓNG PREDICTWEBCAM
-    //const poseClassifier = await tf.loadLayersModel("./models/model.json");
-    //console.log("loadmodel");
-    // requestRef.current = requestAnimationFrame(() => {
-    //   predictWebcam(detector, poseClassifier);
-    // });
+    const poseClassifier = await tf.loadLayersModel("./models/model.json");
+    console.log("loadmodel");
+    requestRef.current = requestAnimationFrame(() => {
+      predictWebcam(detector, poseClassifier, degree3Points);
+    });
   };
 
   //Lấy model chung từ App component (chỉ load 1 lần duy nhất), nếu dùng trong Home vẫn load lại khi re-render home
@@ -257,6 +263,60 @@ const YogaApp = () => {
   //         predictWebcam(detector, poseClassifier);
   //     })
   // })
+
+  const drawTestImage = (canvas, image, poses, errorPoints) => {
+    canvas.width = image.width;
+    canvas.height = image.height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(image, 0, 0);
+    for (let i = 0; i < 17; i++) {
+      const x = poses[0].keypoints[i].x;
+      const y = poses[0].keypoints[i].y;
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, 2 * Math.PI);
+      ctx.fillStyle = "gray";
+      ctx.strokeStyle = "gray";
+      ctx.fill();
+      ctx.stroke();
+
+      //draw errorPoint
+      if (errorPoints.includes(i)){
+        console.log(i);
+        ctx.beginPath();
+        ctx.arc(x, y, 15, 0, 2 * Math.PI);
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+      }
+    }
+    const couplePoints = [
+      [0, 1],
+      [0, 2],
+      [1, 3],
+      [2, 4],
+      [5, 6],
+      [6, 8],
+      [8, 10],
+      [5, 7],
+      [7, 9],
+      [6, 12],
+      [12, 14],
+      [14, 16],
+      [5, 11],
+      [11, 13],
+      [13, 15],
+      [11, 12],
+    ];
+    for (let i = 0; i < couplePoints.length; i++) {
+      const x1 = poses[0].keypoints[couplePoints[i][0]].x;
+      const y1 = poses[0].keypoints[couplePoints[i][0]].y;
+      const x2 = poses[0].keypoints[couplePoints[i][1]].x;
+      const y2 = poses[0].keypoints[couplePoints[i][1]].y;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+  };
 
   const drawSampleImage = (canvas, image, poses) => {
     canvas.width = image.width;
@@ -302,7 +362,7 @@ const YogaApp = () => {
     }
   };
 
-  const draw = (canvas, video, poses) => {
+  const draw = (canvas, video, poses, errorPoints) => {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext("2d");
@@ -313,9 +373,19 @@ const YogaApp = () => {
       const y = poses[0].keypoints[i].y;
       ctx.beginPath();
       ctx.arc(x, y, 10, 0, 2 * Math.PI);
+      ctx.strokeStyle = "gray";
       ctx.fillStyle = colorStroke;
       ctx.fill();
       ctx.stroke();
+
+      //draw errorPoint
+      if (errorPoints.includes(i)){
+        console.log(i);
+        ctx.beginPath();
+        ctx.arc(x, y, 15, 0, 2 * Math.PI);
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+      }
     }
     const couplePoints = [
       [0, 1],
@@ -452,7 +522,7 @@ const YogaApp = () => {
     return embedding;
   }
 
-  function predictWebcam(detector, poseClassifier) {
+  function predictWebcam(detector, poseClassifier, degree3Points) {
     if (
       typeof webcamRef.current !== "undefined" &&
       webcamRef.current !== null &&
@@ -463,6 +533,26 @@ const YogaApp = () => {
       const outputCanvas = canvasRef.current;
       outputCanvas.style.transform = "rotateY(180deg)";
       detector.estimatePoses(video).then((poses) => {
+        //degree comparition
+        const degree3PointsFrame = [];
+        for (let i = 0; i < triplePoints.length; i++){
+          const pointA = poses[0].keypoints[triplePoints[i][0]];
+          const pointB = poses[0].keypoints[triplePoints[i][1]];
+          const pointC = poses[0].keypoints[triplePoints[i][2]];
+          degree3PointsFrame.push(degree3Point(pointA, pointB, pointC));
+        }
+        console.log(degree3PointsFrame);
+        const errorPoints = [];
+        for (let i = 0; i < degree3Points.length; i++) {
+          console.log(degree3PointsFrame[i] - degree3Points[i]);
+          if (Math.abs(degree3PointsFrame[i] - degree3Points[i]) > 10){
+            errorPoints.push(triplePoints[i][1]);
+          }
+        }
+        draw(outputCanvas, video, poses, errorPoints);
+
+        //classification
+        /*
         draw(outputCanvas, video, poses);
         const keypoints = poses[0].keypoints;
         let input = keypoints.map((keypoint) => {
@@ -523,11 +613,11 @@ const YogaApp = () => {
               //console.log(NO_CLASS[i]);
             }
           }
-        });
+        });*/
       });
     }
     requestRef.current = requestAnimationFrame(() => {
-      predictWebcam(detector, poseClassifier);
+      predictWebcam(detector, poseClassifier, degree3Points);
     });
   }
 
@@ -599,14 +689,14 @@ const YogaApp = () => {
         ref={canvasRef}
         id="my-canvas"
         className="canvas"
-        style={{ visibility: "hidden" }}
+        // style={{ visibility: "hidden" }}
       ></canvas>
       <Webcam
         muted={false}
         id="webcam"
         ref={webcamRef}
         className="webcam"
-        style={{ visibility: "hidden" }}
+        // style={{ visibility: "hidden" }}
       />
       <div className="media-container">
         <div className="tutorial-container" id="myTutorial">
