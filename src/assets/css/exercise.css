@@ -51,11 +51,60 @@
     color: tomato;
 }
 
-.exercise-img {
+.exercise-img, .your-exercise-img {
     width: 100%;
 }
 
 .favorite-icon {
     cursor: pointer;
     color: #ccc;
+}
+
+.add-your-exercise {
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+.add-your-exercise:hover {
+    opacity: 0.6;
+}
+
+.modal-add-your-exercise {
+    position: fixed;
+    top: 30vh;
+    left: 10vw;
+    width: 80vw;
+    background-color: #fff;
+    border: 2px solid #333;
+    box-shadow: 5px 5px #333;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.submit-your-exercise-btn {
+    margin: 20px;
+    padding: 10px;
+    width: 60%;
+    border: none;
+    background-color: #333;
+    color: tomato;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+#add-your-exercise-img {
+    width: 40%;
+}
+
+#your-exercise-name-input {
+    width: 40%;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    background-color: #ccc;
 }

@@ -54,6 +54,18 @@ function CircularProgressWithLabel(props) {
   );
 }
 
+const listExercisesName = [
+  "Chair",
+  "Cobra",
+  "Dog",
+  "Shoulderstand",
+  "Traingle",
+  "Tree",
+  "Warrior",
+  "YourExercise",
+  "addYourExercise",
+];
+
 //TUTORIAL YOUTUBE LINK
 const tutorialLink = {
   Chair: "https://www.youtube.com/embed/NUTWhwm04WY",
@@ -170,6 +182,14 @@ const YogaApp = () => {
   useEffect(() => {
     completedRef.current.style.visibility = "hidden";
 
+    //Thay doi sample image href
+    if (exerciseName != "YourExercise"){
+      const href = `./images/${exerciseName}.jpg`;
+      document.getElementById("sampleImage").src = href;
+    } else {
+      document.getElementById("sampleImage").src = localStorage.getItem("fileBase64");
+    }
+
     //fetch sẵn tts
     //   const context = new AudioContext();
     //   fetch("https://api.fpt.ai/hmi/tts/v5", {
@@ -202,12 +222,12 @@ const YogaApp = () => {
     // }, 100);
 
     //SAMPLE IMAGE
+    
     const sampleImage = document.getElementById("sampleImage");
     const samplePoses = await detector.estimatePoses(sampleImage);
-    console.log(samplePoses);
     const sampleCanvas = document.getElementById("sampleCanvas");
     drawSampleImage(sampleCanvas, sampleImage, samplePoses);
-
+    
     const degree3Points = [];
 
     for (let i = 0; i < triplePoints.length; i++){
@@ -216,8 +236,24 @@ const YogaApp = () => {
       const pointC = samplePoses[0].keypoints[triplePoints[i][2]];
       degree3Points.push(degree3Point(pointA, pointB, pointC));
     }
-
     console.log(degree3Points);
+    
+
+    //const sampleImage = document.getElementById("sampleImage");
+    //const samplePoses = await detector.estimatePoses(sampleImage);
+    //console.log(samplePoses);
+    //const sampleCanvas = document.getElementById("sampleCanvas");
+    //drawSampleImage(sampleCanvas, sampleImage, samplePoses);
+
+    // const degree3Points = [];
+
+    // for (let i = 0; i < triplePoints.length; i++){
+    //   const pointA = samplePoses[0].keypoints[triplePoints[i][0]];
+    //   const pointB = samplePoses[0].keypoints[triplePoints[i][1]];
+    //   const pointC = samplePoses[0].keypoints[triplePoints[i][2]];
+    //   degree3Points.push(degree3Point(pointA, pointB, pointC));
+    // }
+    // console.log(degree3Points);
 
     //TEST IMAGE
     /*
@@ -322,7 +358,7 @@ const YogaApp = () => {
     canvas.width = image.width;
     canvas.height = image.height;
     const ctx = canvas.getContext("2d");
-    ctx.drawImage(image, 0, 0);
+    //ctx.drawImage(image, 0, 0);
     for (let i = 0; i < 17; i++) {
       const x = poses[0].keypoints[i].x;
       const y = poses[0].keypoints[i].y;
@@ -728,10 +764,8 @@ const YogaApp = () => {
           </audio>
         </div>
       </div>
-      <img src="./images/Tree.jpg" id="sampleImage" />
-      <canvas id="sampleCanvas" width="750" height="500" />
-      <img src="./images/Tree3.jpg" id="testImage" />
-      <canvas id="testCanvas" width="750" height="500" />
+      <img src="./images/Tree.jpg" id="sampleImage" style={{"opacity": 1, "width": "100%", "position": "absolute", "top": "100vh", "left": 0}}/>
+      <canvas id="sampleCanvas" style={{"opacity": 1, "width": "100%", "position": "absolute", "top": "100vh", "left": 0}}/>
 
       {/* <iframe
         src="https://codesandbox.io/embed/upload-widget-react-forked-8xjvyk?fontsize=14&hidenavigation=1&theme=dark"
