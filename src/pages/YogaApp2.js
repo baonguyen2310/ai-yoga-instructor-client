@@ -122,22 +122,22 @@ const degree3Point = (pointA, pointB, pointC) => {
 };
 
 const triplePoints = [
-  [10, 8, 6],
+  [10, 8, 6], //góc khuỷu tay phải
   [8, 6, 5],
   [6, 5, 7],
-  [5, 7, 9],
-  [8, 6, 12],
+  [5, 7, 9],  //góc khuỷu tay trái
+  [8, 6, 12], //góc cánh tay phải
   [12, 6, 5],
-  [7, 5, 11],
+  [7, 5, 11], //góc cánh tay trái
   [11, 5, 6],
   [6, 12, 1],
   [5, 11, 12],
-  [6, 12, 14],
-  [5, 11, 13],
+  [6, 12, 14],  //góc hông đùi phải
+  [5, 11, 13],  //góc hông đùi trái
   [14, 12, 11],
   [13, 11, 12],
-  [12, 14, 16],
-  [11, 13, 15]
+  [12, 14, 16], //góc đầu gối phải
+  [11, 13, 15]  //góc đầu gối trái
 ];
 
 let colorStroke = "gray";
@@ -409,7 +409,7 @@ const YogaApp = () => {
       const y = poses[0].keypoints[i].y;
       ctx.beginPath();
       ctx.arc(x, y, 10, 0, 2 * Math.PI);
-      ctx.strokeStyle = "gray";
+      ctx.strokeStyle = "green";
       ctx.fillStyle = colorStroke;
       ctx.fill();
       ctx.stroke();
@@ -585,28 +585,19 @@ const YogaApp = () => {
             errorPoints.push(triplePoints[i][1]);
           }
         }
+        //Độ chính xác bằng số điểm đúng / tổng số điểm (16)
+        const accuracyFrame = (triplePoints.length-errorPoints.length)/triplePoints.length;
+        setAccuracy(accuracyFrame);
+
         draw(outputCanvas, video, poses, errorPoints);
 
-        //classification
-        /*
-        draw(outputCanvas, video, poses);
-        const keypoints = poses[0].keypoints;
-        let input = keypoints.map((keypoint) => {
-          return [keypoint.x, keypoint.y];
-        });
-        const processedInput = landmarks_to_embedding(input);
-        const classification = poseClassifier.predict(processedInput);
-        classification.array().then((data) => {
-          const exerciseIndex = NO_CLASS.indexOf(exerciseName);
-          //real
-
-          setAccuracy(data[0][exerciseIndex]);
-          if (data[0][exerciseIndex] > 0.97 && Boolean(flag.current) == false) {
+          //Đếm ngược
+          if (accuracyFrame > 0.97 && Boolean(flag.current) == false) {
             //chưa bắt đầu, tập đúng động tác
             colorStroke = "green";
             flag.current = true;
             startTimeRef.current = new Date();
-          } else if (data[0][exerciseIndex] > 0.97 && flag.current == true) {
+          } else if (accuracyFrame > 0.97 && flag.current == true) {
             //đã bắt đầu, tập đúng động tác
             if (countdownRef.current > 0) {
               countdownRef.current =
@@ -622,7 +613,7 @@ const YogaApp = () => {
                 document.getElementById("completedAudio").play();
               }
             }
-          } else if (data[0][exerciseIndex] <= 0.97 && flag.current == true) {
+          } else if (accuracyFrame<= 0.97 && flag.current == true) {
             //đã bắt đầu, tập sai động tác
             colorStroke = "gray";
             flag.current = false;
@@ -630,26 +621,50 @@ const YogaApp = () => {
 
           //Phát hướng dẫn bằng giọng nói
           if (
-            data[0][exerciseIndex] > 0.85 &&
-            data[0][exerciseIndex] <= 0.9 &&
+            accuracyFrame > 0.6 &&
+            accuracyFrame <= 0.9 &&
             voiceRef.current == true &&
             new Date() - playTimeRef.current > 10000
           ) {
-            //audioRef.current.play();
-            const arrayVoice = document.getElementsByClassName("voice");
+            const arrayVoice = [];
+            
+            for (let i = 0; i < degree3Points.length; i++) {
+              if (Math.abs(degree3PointsFrame[i] - degree3Points[i]) > 10){
+                
+              }
+            }
+
+            //hard code
+            if ((degree3PointsFrame[3] - degree3Points[3] < -10) || (degree3PointsFrame[0] - degree3Points[0] < -10)) {
+              arrayVoice.push(document.getElementById("voice1a"));
+            }
+            if ((degree3PointsFrame[3] - degree3Points[3] > 10) || (degree3PointsFrame[0] - degree3Points[0] > 10)) {
+              arrayVoice.push(document.getElementById("voice1b"));
+            }
+            if ((degree3PointsFrame[6] - degree3Points[6] < -10) || (degree3PointsFrame[4] - degree3Points[4] < -10)) {
+              arrayVoice.push(document.getElementById("voice2a"));
+            }
+            if ((degree3PointsFrame[6] - degree3Points[6] > 10) || (degree3PointsFrame[4] - degree3Points[4] > 10)) {
+              arrayVoice.push(document.getElementById("voice2b"));
+            }
+            if ((degree3PointsFrame[11] - degree3Points[11] < -10) || (degree3PointsFrame[10] - degree3Points[10] < -10)) {
+              arrayVoice.push(document.getElementById("voice3a"));
+            }
+            if ((degree3PointsFrame[11] - degree3Points[11] > 10) || (degree3PointsFrame[10] - degree3Points[10] > 10)) {
+              arrayVoice.push(document.getElementById("voice3b"));
+            }
+            if ((degree3PointsFrame[15] - degree3Points[15] < -10) || (degree3PointsFrame[14] - degree3Points[14] < -10)) {
+              arrayVoice.push(document.getElementById("voice4a"));
+            }
+            if ((degree3PointsFrame[15] - degree3Points[15] > 10) || (degree3PointsFrame[14] - degree3Points[14] > 10)) {
+              arrayVoice.push(document.getElementById("voice4b"));
+            }
+
             const randomVoice =
               arrayVoice[Math.floor(Math.random() * arrayVoice.length)];
             randomVoice.play();
             playTimeRef.current = new Date();
           }
-
-          //test
-          for (let i = 0; i < 8; i++) {
-            if (data[0][i] > 0.97) {
-              //console.log(NO_CLASS[i]);
-            }
-          }
-        });*/
       });
     }
     requestRef.current = requestAnimationFrame(() => {
@@ -753,6 +768,7 @@ const YogaApp = () => {
           <audio id="completedAudio">
             <source src="./completed.mp3" />
           </audio>
+
           <audio className="voice">
             <source src="./voice1.mp3" />
           </audio>
@@ -761,6 +777,31 @@ const YogaApp = () => {
           </audio>
           <audio className="voice">
             <source src="./voice3.mp3" />
+          </audio>
+
+          <audio id="voice1a">
+            <source src="./morongkhuyutay.mp3" />
+          </audio>
+          <audio id="voice1b">
+            <source src="./thuhepkhuyutay.mp3" />
+          </audio>
+          <audio id="voice2a">
+            <source src="./nangcanhtay.mp3" />
+          </audio>
+          <audio id="voice2b">
+            <source src="./hacanhtay.mp3" />
+          </audio>
+          <audio id="voice3a">
+            <source src="./giuduivathanxanhau.mp3" />
+          </audio>
+          <audio id="voice3b">
+            <source src="./giuduivathansatnhau.mp3" />
+          </audio>
+          <audio id="voice4a">
+            <source src="./duoithangchan.mp3" />
+          </audio>
+          <audio id="voice4b">
+            <source src="./cochan.mp3" />
           </audio>
         </div>
       </div>
