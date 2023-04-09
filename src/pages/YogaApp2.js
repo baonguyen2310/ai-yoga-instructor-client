@@ -17,6 +17,7 @@ import CircularProgress, {
 } from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import zIndex from "@mui/material/styles/zIndex";
 
 function CircularProgressWithLabel(props) {
   return (
@@ -157,6 +158,12 @@ const YogaApp = () => {
   const countdownRef = useRef(20000);
 
   const [accuracy, setAccuracy] = useState(0);
+
+  const levelRef = useRef("medium");
+
+  const handleChangeLevel = () => {
+    levelRef.current = document.getElementById("levelSelect").value;
+  }
 
   const voiceRef = useRef(false);
   const playTimeRef = useRef(new Date());
@@ -565,6 +572,7 @@ const YogaApp = () => {
       webcamRef.current.video.readyState === 4
     ) {
       const video = webcamRef.current.video;
+      //const video = document.getElementById("videoTreePose");
       video.style.transform = "rotateY(180deg)";
       const outputCanvas = canvasRef.current;
       outputCanvas.style.transform = "rotateY(180deg)";
@@ -579,9 +587,21 @@ const YogaApp = () => {
         }
         console.log(degree3PointsFrame);
         const errorPoints = [];
+        let levelOffsetDegree = 10;
+        let levelAccuracy = 0.97;
+        if (levelRef.current === "easy"){
+          levelOffsetDegree = 15;
+          levelAccuracy = 0.80;
+        } else if (levelRef.current === "medium") {
+          levelOffsetDegree = 13;
+          levelAccuracy = 0.85;
+        } else {
+          levelOffsetDegree = 10;
+          levelAccuracy = 0.90;
+        }
         for (let i = 0; i < degree3Points.length; i++) {
           console.log(degree3PointsFrame[i] - degree3Points[i]);
-          if (Math.abs(degree3PointsFrame[i] - degree3Points[i]) > 10){
+          if (Math.abs(degree3PointsFrame[i] - degree3Points[i]) > levelOffsetDegree){
             errorPoints.push(triplePoints[i][1]);
           }
         }
@@ -592,12 +612,12 @@ const YogaApp = () => {
         draw(outputCanvas, video, poses, errorPoints);
 
           //Đếm ngược
-          if (accuracyFrame > 0.97 && Boolean(flag.current) == false) {
+          if (accuracyFrame > levelAccuracy && Boolean(flag.current) == false) {
             //chưa bắt đầu, tập đúng động tác
             colorStroke = "green";
             flag.current = true;
             startTimeRef.current = new Date();
-          } else if (accuracyFrame > 0.97 && flag.current == true) {
+          } else if (accuracyFrame > levelAccuracy && flag.current == true) {
             //đã bắt đầu, tập đúng động tác
             if (countdownRef.current > 0) {
               countdownRef.current =
@@ -613,7 +633,7 @@ const YogaApp = () => {
                 document.getElementById("completedAudio").play();
               }
             }
-          } else if (accuracyFrame<= 0.97 && flag.current == true) {
+          } else if (accuracyFrame<= levelAccuracy && flag.current == true) {
             //đã bắt đầu, tập sai động tác
             colorStroke = "gray";
             flag.current = false;
@@ -622,7 +642,7 @@ const YogaApp = () => {
           //Phát hướng dẫn bằng giọng nói
           if (
             accuracyFrame > 0.6 &&
-            accuracyFrame <= 0.9 &&
+            accuracyFrame <= levelAccuracy-0.1 &&
             voiceRef.current == true &&
             new Date() - playTimeRef.current > 10000
           ) {
@@ -736,7 +756,13 @@ const YogaApp = () => {
           />
         </div>
       </footer>
+      <select id="levelSelect" onChange={handleChangeLevel}>
+            <option value="easy">DỄ</option>
+            <option value="medium" selected="selected">VỪA</option>
+            <option value="hard">KHÓ</option>
+      </select>
       <canvas
+        style={{zIndex:1005}}
         ref={canvasRef}
         id="my-canvas"
         className="canvas"
@@ -807,6 +833,9 @@ const YogaApp = () => {
       </div>
       <img src="./images/Tree.jpg" id="sampleImage" style={{"opacity": 1, "width": "100%", "position": "absolute", "top": "100vh", "left": 0}}/>
       <canvas id="sampleCanvas" style={{"opacity": 1, "width": "100%", "position": "absolute", "top": "100vh", "left": 0}}/>
+      {/* <video controls id="videoTreePose" style={{zIndex: 1004}} loop autoPlay>
+        <source src="./videoTreePose.mp4" />
+      </video> */}
 
       {/* <iframe
         src="https://codesandbox.io/embed/upload-widget-react-forked-8xjvyk?fontsize=14&hidenavigation=1&theme=dark"

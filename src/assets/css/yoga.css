@@ -52,6 +52,14 @@
         scale: 0.6;
     }
 
+    #videoTreePose {
+        position: absolute;
+        left: 0;
+        top: -16%;
+        width: 100%;
+        scale: 0.6;
+    }
+
     .tutorial {
         position: absolute;
         right: 0;
@@ -104,6 +112,28 @@
     bottom: 0;
     left: 0;
     z-index: 1002;
+}
+
+#levelSelect {
+    display: flex;
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    z-index: 1002;
+    padding: 10px;
+    padding-top: 20px;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: tomato;
+    background-color: #000;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#levelSelect:hover {
+    background-color: #ccc;
+    color: #000;
 }
 
 .run-btn, .tutorial-btn {
