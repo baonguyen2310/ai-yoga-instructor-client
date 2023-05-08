@@ -571,8 +571,8 @@ const YogaApp = () => {
       webcamRef.current !== null &&
       webcamRef.current.video.readyState === 4
     ) {
-      const video = webcamRef.current.video;
-      //const video = document.getElementById("videoTreePose");
+      //const video = webcamRef.current.video;
+      const video = document.getElementById("videoTreePose");
       video.style.transform = "rotateY(180deg)";
       const outputCanvas = canvasRef.current;
       outputCanvas.style.transform = "rotateY(180deg)";
@@ -701,7 +701,7 @@ const YogaApp = () => {
         </p>
         <p>
           Đếm ngược:
-          <h2>{Math.floor(countdown / 1000)} giây</h2>
+          <h2>{Math.floor(countdownRef.current / 1000)} giây</h2>
         </p>
         <div className="completed" ref={completedRef}>
           Completed!
@@ -831,9 +831,9 @@ const YogaApp = () => {
           </audio>
         </div>
       </div>
-      <img src="./images/Tree.jpg" id="sampleImage" style={{"opacity": 1, "width": "100%", "position": "absolute", "top": "100vh", "left": 0}}/>
-      <canvas id="sampleCanvas" style={{"opacity": 1, "width": "100%", "position": "absolute", "top": "100vh", "left": 0}}/>
-      {/* <video controls id="videoTreePose" style={{zIndex: 1004}} loop autoPlay>
+      <img src="./images/Tree.jpg" id="sampleImage" style={{"opacity": 1, "max-width": "100%", "max-height": "100%", "position": "absolute", "top": "100vh", "left": 0}}/>
+      <canvas id="sampleCanvas" style={{"opacity": 1, "max-width": "100%", "max-height": "100%", "position": "absolute", "top": "100vh", "left": 0}}/>
+      {/* <video controls id="videoTreePose" style={{zIndex: 999}} loop autoPlay>
         <source src="./videoTreePose.mp4" />
       </video> */}
 
