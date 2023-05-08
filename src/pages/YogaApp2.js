@@ -571,8 +571,8 @@ const YogaApp = () => {
       webcamRef.current !== null &&
       webcamRef.current.video.readyState === 4
     ) {
-      //const video = webcamRef.current.video;
-      const video = document.getElementById("videoTreePose");
+      const video = webcamRef.current.video;
+      //const video = document.getElementById("videoTreePose");
       video.style.transform = "rotateY(180deg)";
       const outputCanvas = canvasRef.current;
       outputCanvas.style.transform = "rotateY(180deg)";
