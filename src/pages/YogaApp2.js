@@ -216,6 +216,7 @@ const YogaApp = () => {
   }, []);
 
   const loadModel = async () => {
+    await tf.ready(); // Chờ cho TensorFlow.js sẵn sàng
     const detectorConfig = {
       modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
     };
