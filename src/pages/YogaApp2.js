@@ -244,7 +244,7 @@ const YogaApp = () => {
       const pointC = samplePoses[0].keypoints[triplePoints[i][2]];
       degree3Points.push(degree3Point(pointA, pointB, pointC));
     }
-    console.log(degree3Points);
+    //console.log(degree3Points);
     
 
     //const sampleImage = document.getElementById("sampleImage");
@@ -325,7 +325,7 @@ const YogaApp = () => {
 
       //draw errorPoint
       if (errorPoints.includes(i)){
-        console.log(i);
+        //console.log(i);
         ctx.beginPath();
         ctx.arc(x, y, 15, 0, 2 * Math.PI);
         ctx.strokeStyle = "red";
@@ -424,7 +424,7 @@ const YogaApp = () => {
 
       //draw errorPoint
       if (errorPoints.includes(i)){
-        console.log(i);
+        //console.log(i);
         ctx.beginPath();
         ctx.arc(x, y, 15, 0, 2 * Math.PI);
         ctx.strokeStyle = "red";
@@ -586,7 +586,7 @@ const YogaApp = () => {
           const pointC = poses[0].keypoints[triplePoints[i][2]];
           degree3PointsFrame.push(degree3Point(pointA, pointB, pointC));
         }
-        console.log(degree3PointsFrame);
+        //console.log(degree3PointsFrame);
         const errorPoints = [];
         let levelOffsetDegree = 10;
         let levelAccuracy = 0.97;
@@ -601,7 +601,7 @@ const YogaApp = () => {
           levelAccuracy = 0.90;
         }
         for (let i = 0; i < degree3Points.length; i++) {
-          console.log(degree3PointsFrame[i] - degree3Points[i]);
+          //console.log(degree3PointsFrame[i] - degree3Points[i]);
           if (Math.abs(degree3PointsFrame[i] - degree3Points[i]) > levelOffsetDegree){
             errorPoints.push(triplePoints[i][1]);
           }
