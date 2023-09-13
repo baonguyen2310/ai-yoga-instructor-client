@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Button, SvgIcon } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
+import './chain_style.css';
 
 import { detector, poseClassifier } from "../App";
 import "../assets/css/yoga.css";
@@ -18,6 +19,9 @@ import CircularProgress, {
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import zIndex from "@mui/material/styles/zIndex";
+
+
+
 
 function CircularProgressWithLabel(props) {
   return (
@@ -56,16 +60,782 @@ function CircularProgressWithLabel(props) {
 }
 
 const listExercisesName = [
+  "Tree",
   "Chair",
   "Cobra",
   "Dog",
   "Shoulderstand",
   "Traingle",
-  "Tree",
-  "Warrior",
-  "YourExercise",
-  "addYourExercise",
+  "Warrior"
 ];
+
+const sampleObjects = {
+  "Tree": [
+    {
+        "keypoints": [
+            {
+                "y": 72.03196048736572,
+                "x": 424.62588691711426,
+                "score": 0.8091042041778564,
+                "name": "nose"
+            },
+            {
+                "y": 64.9690318107605,
+                "x": 430.671142578125,
+                "score": 0.894550621509552,
+                "name": "left_eye"
+            },
+            {
+                "y": 65.2915620803833,
+                "x": 414.9272766113281,
+                "score": 0.8568142056465149,
+                "name": "right_eye"
+            },
+            {
+                "y": 70.83866357803345,
+                "x": 438.9241352081299,
+                "score": 0.890329897403717,
+                "name": "left_ear"
+            },
+            {
+                "y": 72.45401859283447,
+                "x": 404.87504386901855,
+                "score": 0.7882335186004639,
+                "name": "right_ear"
+            },
+            {
+                "y": 114.40486192703247,
+                "x": 459.9100532531738,
+                "score": 0.7200131416320801,
+                "name": "left_shoulder"
+            },
+            {
+                "y": 112.43011236190796,
+                "x": 383.2480421066284,
+                "score": 0.909952700138092,
+                "name": "right_shoulder"
+            },
+            {
+                "y": 177.9515790939331,
+                "x": 477.17595481872564,
+                "score": 0.6679749488830566,
+                "name": "left_elbow"
+            },
+            {
+                "y": 175.06339073181152,
+                "x": 369.099081993103,
+                "score": 0.7998969554901123,
+                "name": "right_elbow"
+            },
+            {
+                "y": 149.34961795806885,
+                "x": 435.7148971557618,
+                "score": 0.7595751881599426,
+                "name": "left_wrist"
+            },
+            {
+                "y": 148.1403923034668,
+                "x": 415.81068897247314,
+                "score": 0.6540475487709045,
+                "name": "right_wrist"
+            },
+            {
+                "y": 223.51929187774658,
+                "x": 454.079517364502,
+                "score": 0.9246522784233093,
+                "name": "left_hip"
+            },
+            {
+                "y": 228.22161197662354,
+                "x": 408.95187282562256,
+                "score": 0.8899399638175964,
+                "name": "right_hip"
+            },
+            {
+                "y": 262.6639652252197,
+                "x": 526.0806217193604,
+                "score": 0.7009806036949158,
+                "name": "left_knee"
+            },
+            {
+                "y": 311.5016269683838,
+                "x": 423.4832372665405,
+                "score": 0.7659391164779663,
+                "name": "right_knee"
+            },
+            {
+                "y": 257.3613739013672,
+                "x": 440.8122959136963,
+                "score": 0.6702132821083069,
+                "name": "left_ankle"
+            },
+            {
+                "y": 399.8912715911865,
+                "x": 432.46423149108887,
+                "score": 0.9087509512901306,
+                "name": "right_ankle"
+            }
+        ],
+        "score": 0.8006452427190893
+    }
+  ],
+  "Chair": [
+    {
+        "keypoints": [
+            {
+                "y": 139.24859046936035,
+                "x": 470.5589809417724,
+                "score": 0.6807287931442261,
+                "name": "nose"
+            },
+            {
+                "y": 129.26576614379883,
+                "x": 467.3133792877197,
+                "score": 0.7078380584716797,
+                "name": "left_eye"
+            },
+            {
+                "y": 128.17575931549072,
+                "x": 466.9362964630127,
+                "score": 0.7217124700546265,
+                "name": "right_eye"
+            },
+            {
+                "y": 128.0339527130127,
+                "x": 449.1252841949463,
+                "score": 0.6751715540885925,
+                "name": "left_ear"
+            },
+            {
+                "y": 128.09828281402588,
+                "x": 449.587739944458,
+                "score": 0.6172396540641785,
+                "name": "right_ear"
+            },
+            {
+                "y": 148.20659637451172,
+                "x": 437.8937377929687,
+                "score": 0.800726056098938,
+                "name": "left_shoulder"
+            },
+            {
+                "y": 150.0469207763672,
+                "x": 436.34523773193354,
+                "score": 0.8616435527801514,
+                "name": "right_shoulder"
+            },
+            {
+                "y": 109.13320541381836,
+                "x": 487.5379219055176,
+                "score": 0.7145999073982239,
+                "name": "left_elbow"
+            },
+            {
+                "y": 109.79424476623535,
+                "x": 486.4477291107177,
+                "score": 0.790594220161438,
+                "name": "right_elbow"
+            },
+            {
+                "y": 66.43939018249512,
+                "x": 517.8785552978516,
+                "score": 0.8214476108551025,
+                "name": "left_wrist"
+            },
+            {
+                "y": 67.11768865585327,
+                "x": 519.3241157531738,
+                "score": 0.7270858883857727,
+                "name": "right_wrist"
+            },
+            {
+                "y": 239.55699920654297,
+                "x": 367.77172470092773,
+                "score": 0.7039597034454346,
+                "name": "left_hip"
+            },
+            {
+                "y": 240.1237392425537,
+                "x": 365.3731575012207,
+                "score": 0.8516328930854797,
+                "name": "right_hip"
+            },
+            {
+                "y": 314.78925704956055,
+                "x": 435.23144149780273,
+                "score": 0.7324361205101013,
+                "name": "left_knee"
+            },
+            {
+                "y": 314.1127109527588,
+                "x": 435.8075942993164,
+                "score": 0.7924054861068726,
+                "name": "right_knee"
+            },
+            {
+                "y": 399.5720386505127,
+                "x": 402.14836025238037,
+                "score": 0.7973790764808655,
+                "name": "left_ankle"
+            },
+            {
+                "y": 403.77405166625977,
+                "x": 401.15266704559326,
+                "score": 0.7496075630187988,
+                "name": "right_ankle"
+            }
+        ],
+        "score": 0.7497769769500283
+    }
+  ],
+  "Cobra": [
+    {
+        "keypoints": [
+            {
+                "y": 270.84202766418457,
+                "x": 566.3898315429688,
+                "score": 0.7907153964042664,
+                "name": "nose"
+            },
+            {
+                "y": 262.5149345397949,
+                "x": 561.2219944000244,
+                "score": 0.5776215195655823,
+                "name": "left_eye"
+            },
+            {
+                "y": 262.10031509399414,
+                "x": 560.8266010284424,
+                "score": 0.6625251173973083,
+                "name": "right_eye"
+            },
+            {
+                "y": 266.56405448913574,
+                "x": 539.4678058624266,
+                "score": 0.8171862363815308,
+                "name": "left_ear"
+            },
+            {
+                "y": 266.46946907043457,
+                "x": 536.2448348999025,
+                "score": 0.9392155408859253,
+                "name": "right_ear"
+            },
+            {
+                "y": 309.25912857055664,
+                "x": 523.8598957061768,
+                "score": 0.873195469379425,
+                "name": "left_shoulder"
+            },
+            {
+                "y": 312.8231620788574,
+                "x": 522.5047721862794,
+                "score": 0.7121526598930359,
+                "name": "right_shoulder"
+            },
+            {
+                "y": 377.2734832763672,
+                "x": 492.6948585510254,
+                "score": 0.43608683347702026,
+                "name": "left_elbow"
+            },
+            {
+                "y": 385.7765865325928,
+                "x": 482.23584556579596,
+                "score": 0.7198303937911987,
+                "name": "right_elbow"
+            },
+            {
+                "y": 417.8747749328613,
+                "x": 523.0267086029053,
+                "score": 0.855685830116272,
+                "name": "left_wrist"
+            },
+            {
+                "y": 443.3485794067383,
+                "x": 525.2712383270264,
+                "score": 0.7714128494262695,
+                "name": "right_wrist"
+            },
+            {
+                "y": 400.0366687774658,
+                "x": 465.442928314209,
+                "score": 0.7419421672821045,
+                "name": "left_hip"
+            },
+            {
+                "y": 406.7434501647949,
+                "x": 457.02748680114746,
+                "score": 0.907662034034729,
+                "name": "right_hip"
+            },
+            {
+                "y": 420.397310256958,
+                "x": 346.3176860809326,
+                "score": 0.8373386263847351,
+                "name": "left_knee"
+            },
+            {
+                "y": 426.8781852722168,
+                "x": 342.9534378051758,
+                "score": 0.8412832021713257,
+                "name": "right_knee"
+            },
+            {
+                "y": 422.65528678894043,
+                "x": 246.4811279773712,
+                "score": 0.8378542065620422,
+                "name": "left_ankle"
+            },
+            {
+                "y": 426.69962882995605,
+                "x": 237.27140212059024,
+                "score": 0.7893593311309814,
+                "name": "right_ankle"
+            }
+        ],
+        "score": 0.7712392596637502
+    }
+  ],
+  "Dog": [
+    {
+        "keypoints": [
+            {
+                "y": 309.8177719116211,
+                "x": 460.17896080017084,
+                "score": 0.7017588019371033,
+                "name": "nose"
+            },
+            {
+                "y": 312.94060707092285,
+                "x": 471.15870857238764,
+                "score": 0.5606895089149475,
+                "name": "left_eye"
+            },
+            {
+                "y": 312.5195503234863,
+                "x": 471.15570449829096,
+                "score": 0.533721923828125,
+                "name": "right_eye"
+            },
+            {
+                "y": 293.1764316558838,
+                "x": 489.0617027282715,
+                "score": 0.7554617524147034,
+                "name": "left_ear"
+            },
+            {
+                "y": 293.5872173309326,
+                "x": 486.2854232788086,
+                "score": 0.7532348036766052,
+                "name": "right_ear"
+            },
+            {
+                "y": 261.383056640625,
+                "x": 479.46360015869146,
+                "score": 0.7082511782646179,
+                "name": "left_shoulder"
+            },
+            {
+                "y": 257.70581245422363,
+                "x": 482.0358314514161,
+                "score": 0.7972041368484497,
+                "name": "right_shoulder"
+            },
+            {
+                "y": 328.5033702850342,
+                "x": 513.260663986206,
+                "score": 0.7853984236717224,
+                "name": "left_elbow"
+            },
+            {
+                "y": 330.8103847503662,
+                "x": 515.119213104248,
+                "score": 0.936306357383728,
+                "name": "right_elbow"
+            },
+            {
+                "y": 371.49696350097656,
+                "x": 558.2543983459473,
+                "score": 0.824309229850769,
+                "name": "left_wrist"
+            },
+            {
+                "y": 385.7769298553467,
+                "x": 564.8558940887451,
+                "score": 0.8203074336051941,
+                "name": "right_wrist"
+            },
+            {
+                "y": 167.92094707489014,
+                "x": 385.8525314331055,
+                "score": 0.838340699672699,
+                "name": "left_hip"
+            },
+            {
+                "y": 166.91139221191406,
+                "x": 386.3650121688843,
+                "score": 0.8381896018981934,
+                "name": "right_hip"
+            },
+            {
+                "y": 276.2392044067383,
+                "x": 328.8453617095947,
+                "score": 0.8861353397369385,
+                "name": "left_knee"
+            },
+            {
+                "y": 276.12545013427734,
+                "x": 330.7771244049073,
+                "score": 0.887147843837738,
+                "name": "right_knee"
+            },
+            {
+                "y": 365.5004596710205,
+                "x": 281.08943128585815,
+                "score": 0.8707959651947021,
+                "name": "left_ankle"
+            },
+            {
+                "y": 372.130651473999,
+                "x": 274.1071834564209,
+                "score": 0.8410971164703369,
+                "name": "right_ankle"
+            }
+        ],
+        "score": 0.784608830423916
+    }
+  ],
+  "Shoulderstand": [
+    {
+        "keypoints": [
+            {
+                "y": 373.3450126647949,
+                "x": 468.97609138488775,
+                "score": 0.4240321218967438,
+                "name": "nose"
+            },
+            {
+                "y": 377.6333999633789,
+                "x": 476.14933395385737,
+                "score": 0.6652382016181946,
+                "name": "left_eye"
+            },
+            {
+                "y": 375.8082675933838,
+                "x": 476.0237064361573,
+                "score": 0.6238306760787964,
+                "name": "right_eye"
+            },
+            {
+                "y": 396.56956672668457,
+                "x": 469.2393627166748,
+                "score": 0.6832805275917053,
+                "name": "left_ear"
+            },
+            {
+                "y": 392.3045539855957,
+                "x": 470.03240966796875,
+                "score": 0.6205549240112305,
+                "name": "right_ear"
+            },
+            {
+                "y": 394.57305908203125,
+                "x": 443.39860343933105,
+                "score": 0.7186741828918457,
+                "name": "left_shoulder"
+            },
+            {
+                "y": 387.6155090332031,
+                "x": 444.55751800537104,
+                "score": 0.5595748424530029,
+                "name": "right_shoulder"
+            },
+            {
+                "y": 410.5438041687012,
+                "x": 394.0532388687133,
+                "score": 0.680519700050354,
+                "name": "left_elbow"
+            },
+            {
+                "y": 408.4166622161865,
+                "x": 393.6459150314331,
+                "score": 0.5809239149093628,
+                "name": "right_elbow"
+            },
+            {
+                "y": 367.4128532409668,
+                "x": 395.7454481124878,
+                "score": 0.5813249349594116,
+                "name": "left_wrist"
+            },
+            {
+                "y": 365.6209945678711,
+                "x": 396.83931732177734,
+                "score": 0.4736979901790619,
+                "name": "right_wrist"
+            },
+            {
+                "y": 332.18456268310547,
+                "x": 407.14160346984863,
+                "score": 0.25824201107025146,
+                "name": "left_hip"
+            },
+            {
+                "y": 343.9785861968994,
+                "x": 410.7064952850342,
+                "score": 0.16845442354679108,
+                "name": "right_hip"
+            },
+            {
+                "y": 246.1150074005127,
+                "x": 426.5068378448486,
+                "score": 0.6215953826904297,
+                "name": "left_knee"
+            },
+            {
+                "y": 246.41507148742676,
+                "x": 424.18232822418213,
+                "score": 0.7028762102127075,
+                "name": "right_knee"
+            },
+            {
+                "y": 177.7566432952881,
+                "x": 431.2551631927491,
+                "score": 0.6780496835708618,
+                "name": "left_ankle"
+            },
+            {
+                "y": 176.350679397583,
+                "x": 432.2338619232178,
+                "score": 0.6638007760047913,
+                "name": "right_ankle"
+            }
+        ],
+        "score": 0.596013505011797
+    }
+  ],
+  "Traingle": [
+    {
+        "keypoints": [
+            {
+                "y": 198.05747509002686,
+                "x": 527.173246383667,
+                "score": 0.8277972936630249,
+                "name": "nose"
+            },
+            {
+                "y": 190.31338691711426,
+                "x": 532.162670135498,
+                "score": 0.8709222674369812,
+                "name": "left_eye"
+            },
+            {
+                "y": 185.78969478607178,
+                "x": 530.8234252929688,
+                "score": 0.7869499921798706,
+                "name": "right_eye"
+            },
+            {
+                "y": 178.2932710647583,
+                "x": 517.5217571258545,
+                "score": 0.8268839120864868,
+                "name": "left_ear"
+            },
+            {
+                "y": 169.80144023895264,
+                "x": 510.7115211486817,
+                "score": 0.7813334465026855,
+                "name": "right_ear"
+            },
+            {
+                "y": 232.56903648376465,
+                "x": 492.33102226257324,
+                "score": 0.7231696248054504,
+                "name": "left_shoulder"
+            },
+            {
+                "y": 158.3012866973877,
+                "x": 462.9080905914307,
+                "score": 0.5881810188293457,
+                "name": "right_shoulder"
+            },
+            {
+                "y": 299.6996212005615,
+                "x": 488.37348365783697,
+                "score": 0.8104081749916077,
+                "name": "left_elbow"
+            },
+            {
+                "y": 95.9734296798706,
+                "x": 450.2906646728515,
+                "score": 0.9238561987876892,
+                "name": "right_elbow"
+            },
+            {
+                "y": 351.0604763031006,
+                "x": 494.7151699066162,
+                "score": 0.7389206290245056,
+                "name": "left_wrist"
+            },
+            {
+                "y": 41.1036479473114,
+                "x": 454.3504276275634,
+                "score": 0.9010368585586548,
+                "name": "right_wrist"
+            },
+            {
+                "y": 254.83989715576172,
+                "x": 405.03229999542236,
+                "score": 0.8074528574943542,
+                "name": "left_hip"
+            },
+            {
+                "y": 234.78396892547607,
+                "x": 371.00249195098877,
+                "score": 0.8060368895530701,
+                "name": "right_hip"
+            },
+            {
+                "y": 323.85912895202637,
+                "x": 454.46632766723627,
+                "score": 0.9270323514938354,
+                "name": "left_knee"
+            },
+            {
+                "y": 313.3011245727539,
+                "x": 316.91927337646484,
+                "score": 0.9214056730270386,
+                "name": "right_knee"
+            },
+            {
+                "y": 403.50786209106445,
+                "x": 511.8643417358399,
+                "score": 0.8691325187683105,
+                "name": "left_ankle"
+            },
+            {
+                "y": 396.4512634277344,
+                "x": 275.38068199157715,
+                "score": 0.8392052054405212,
+                "name": "right_ankle"
+            }
+        ],
+        "score": 0.8205720536849078
+    }
+  ],
+  "Warrior": [
+    {
+        "keypoints": [
+            {
+                "y": 245.9084129333496,
+                "x": 306.55929470062256,
+                "score": 0.6760068535804749,
+                "name": "nose"
+            },
+            {
+                "y": 238.76380920410156,
+                "x": 302.5314679145813,
+                "score": 0.7153491377830505,
+                "name": "left_eye"
+            },
+            {
+                "y": 239.50863361358643,
+                "x": 302.3319902420044,
+                "score": 0.7866851091384888,
+                "name": "right_eye"
+            },
+            {
+                "y": 220.87399005889893,
+                "x": 313.47903633117676,
+                "score": 0.7948037385940552,
+                "name": "left_ear"
+            },
+            {
+                "y": 223.49687576293945,
+                "x": 310.4094877243042,
+                "score": 0.7738028764724731,
+                "name": "right_ear"
+            },
+            {
+                "y": 215.3807830810547,
+                "x": 342.0100727081299,
+                "score": 0.750785231590271,
+                "name": "left_shoulder"
+            },
+            {
+                "y": 215.11023044586182,
+                "x": 338.33244228363037,
+                "score": 0.8755255341529846,
+                "name": "right_shoulder"
+            },
+            {
+                "y": 232.02120780944824,
+                "x": 286.5838541984558,
+                "score": 0.6192175149917603,
+                "name": "left_elbow"
+            },
+            {
+                "y": 227.6502513885498,
+                "x": 284.9901714324951,
+                "score": 0.7840946316719055,
+                "name": "right_elbow"
+            },
+            {
+                "y": 234.77455615997314,
+                "x": 234.6130290031433,
+                "score": 0.7035444974899292,
+                "name": "left_wrist"
+            },
+            {
+                "y": 234.59022045135498,
+                "x": 238.06399130821225,
+                "score": 0.8452064394950867,
+                "name": "right_wrist"
+            },
+            {
+                "y": 230.14384746551514,
+                "x": 448.80004310607916,
+                "score": 0.8682838082313538,
+                "name": "left_hip"
+            },
+            {
+                "y": 226.20845317840576,
+                "x": 449.60647964477545,
+                "score": 0.6684837341308594,
+                "name": "right_hip"
+            },
+            {
+                "y": 314.7608470916748,
+                "x": 420.0287666320801,
+                "score": 0.6109868884086609,
+                "name": "left_knee"
+            },
+            {
+                "y": 247.29683876037598,
+                "x": 541.6498222351074,
+                "score": 0.8627812266349792,
+                "name": "right_knee"
+            },
+            {
+                "y": 400.814208984375,
+                "x": 423.25700187683105,
+                "score": 0.9037577509880066,
+                "name": "left_ankle"
+            },
+            {
+                "y": 238.58327865600586,
+                "x": 625.1389923095703,
+                "score": 0.9197841882705688,
+                "name": "right_ankle"
+            }
+        ],
+        "score": 0.7740646565661711
+    }
+  ]
+}
+
+let degree3Points = [];
 
 //TUTORIAL YOUTUBE LINK
 const tutorialLink = {
@@ -152,7 +922,9 @@ function useQuery() {
 
 const YogaApp = () => {
   let query = useQuery();
-  const exerciseName = query.get("name");
+
+  const [currentIndexExcercise, setCurrentIndexExcercise] = useState(0);
+  const exerciseName = listExercisesName[currentIndexExcercise];
 
   const [countdown, setCountdown] = useState(20000);
   const countdownRef = useRef(20000);
@@ -197,6 +969,20 @@ const YogaApp = () => {
       document.getElementById("sampleImage").src = localStorage.getItem("fileBase64");
     }
 
+    const sampleImage = document.getElementById("sampleImage");
+    const samplePoses = sampleObjects[exerciseName];
+    const sampleCanvas = document.getElementById("sampleCanvas");
+    drawSampleImage(sampleCanvas, sampleImage, samplePoses);
+
+    degree3Points = [];
+
+    for (let i = 0; i < triplePoints.length; i++){
+      const pointA = samplePoses[0].keypoints[triplePoints[i][0]];
+      const pointB = samplePoses[0].keypoints[triplePoints[i][1]];
+      const pointC = samplePoses[0].keypoints[triplePoints[i][2]];
+      degree3Points.push(degree3Point(pointA, pointB, pointC));
+    }
+
     //fetch sẵn tts
     //   const context = new AudioContext();
     //   fetch("https://api.fpt.ai/hmi/tts/v5", {
@@ -213,7 +999,7 @@ const YogaApp = () => {
     //     .then((json) => {
     //       audioRef.current = new Audio(json.async);
     //     });
-  }, []);
+  }, [exerciseName]);
 
   const loadModel = async () => {
     await tf.ready(); // Chờ cho TensorFlow.js sẵn sàng
@@ -230,15 +1016,13 @@ const YogaApp = () => {
     // }, 100);
 
     //SAMPLE IMAGE
-    
+
     const sampleImage = document.getElementById("sampleImage");
     const samplePoses = await detector.estimatePoses(sampleImage);
     const sampleCanvas = document.getElementById("sampleCanvas");
     drawSampleImage(sampleCanvas, sampleImage, samplePoses);
 
-    console.log(samplePoses);
-
-    const degree3Points = [];
+    degree3Points = [];
 
     for (let i = 0; i < triplePoints.length; i++){
       const pointA = samplePoses[0].keypoints[triplePoints[i][0]];
@@ -298,7 +1082,7 @@ const YogaApp = () => {
     const poseClassifier = await tf.loadLayersModel("./models/model.json");
     console.log("loadmodel");
     requestRef.current = requestAnimationFrame(() => {
-      predictWebcam(detector, poseClassifier, degree3Points);
+      predictWebcam(detector, poseClassifier);
     });
   };
 
@@ -568,12 +1352,13 @@ const YogaApp = () => {
     return embedding;
   }
 
-  function predictWebcam(detector, poseClassifier, degree3Points) {
+  async function predictWebcam(detector, poseClassifier) {
     if (
       typeof webcamRef.current !== "undefined" &&
       webcamRef.current !== null &&
       webcamRef.current.video.readyState === 4
     ) {
+
       const video = webcamRef.current.video;
       //const video = document.getElementById("videoTreePose");
       video.style.transform = "rotateY(180deg)";
@@ -594,7 +1379,7 @@ const YogaApp = () => {
         let levelAccuracy = 0.97;
         if (levelRef.current === "easy"){
           levelOffsetDegree = 15;
-          levelAccuracy = 0.80;
+          levelAccuracy = 0.70;
         } else if (levelRef.current === "medium") {
           levelOffsetDegree = 13;
           levelAccuracy = 0.85;
@@ -634,6 +1419,24 @@ const YogaApp = () => {
               if ((completedRef.current.style.visibility = "hidden")) {
                 completedRef.current.style.visibility = "visible";
                 document.getElementById("completedAudio").play();
+                setTimeout(() => {
+                  completedRef.current.style.visibility = "hidden";
+                  // Chuyển động tác
+                  setCurrentIndexExcercise(Math.floor(Math.random()*listExercisesName.length))
+                  console.log(exerciseName)
+                  flag.current = false
+                  setCountdown(20000)
+                  colorStroke = "gray"
+                  countdownRef.current = 20000
+                  document.getElementById("sampleImage").classList.add("animation_move");
+                  document.getElementById("sampleCanvas").classList.add("animation_move");
+                  setTimeout(() => {
+                    document.getElementById("sampleImage").classList.remove("animation_move");
+                    document.getElementById("sampleCanvas").classList.remove("animation_move");
+                  }, 5000)
+                }, 1000)
+
+                
               }
             }
           } else if (accuracyFrame<= levelAccuracy && flag.current == true) {
@@ -691,7 +1494,7 @@ const YogaApp = () => {
       });
     }
     requestRef.current = requestAnimationFrame(() => {
-      predictWebcam(detector, poseClassifier, degree3Points);
+      predictWebcam(detector, poseClassifier);
     });
   }
 

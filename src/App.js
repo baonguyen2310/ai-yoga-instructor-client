@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Yoga from './pages/Yoga';
 import YogaApp from './pages/YogaApp';
 import YogaApp2 from './pages/YogaApp2';
+import YogaApp2Chain from './pages/YogaApp2Chain';
 import Test from './components/Test';
 import { useEffect } from 'react';
 
@@ -48,6 +49,7 @@ const App = () => {
                 <Route path='/login' element={<Login />} />
                 <Route path='/yoga' element={<Yoga />} />
                 <Route path='/yogaapp' element={<YogaApp2 />} />
+                <Route path='/yogaappchain' element={<YogaApp2Chain />} />
                 <Route path='/test' element={<Test />} />
             </Routes>
         </Router>

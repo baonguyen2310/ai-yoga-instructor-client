@@ -1,0 +1,5 @@
+.animation_move {
+    position: fixed !important;
+    top: 10vh !important;
+    z-index: 9999 !important;
+}

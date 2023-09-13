@@ -24,6 +24,18 @@ const listExercisesName = [
   "Warrior",
   "YourExercise",
   "addYourExercise",
+  "chain",
+  "daukiem1",
+  "daukiem2",
+  "daukiem3",
+  "vothuat",
+  "taodangnam",
+  "warrior2",
+  "warrior3",
+  "taodangnu1",
+  "taodangnu2",
+
+
 ];
 
 const getBase64 = (file) => {
@@ -58,7 +70,31 @@ const Exercise = (props) => {
     document.querySelector(".modal-add-your-exercise").style.display = "none";
   }, []);
 
-  if ((props.title != "addYourExercise") && (props.title != "YourExercise")) {
+  if ((props.title == "chain")) {
+    const href = `./images/${props.title}.jpg`;
+    return (
+      <div>
+        <div className="exercise-header">
+          <h2>Chuỗi bài tập</h2>
+          <FavoriteIcon
+            className="favorite-icon"
+            onClick={(e) => {
+              if (e.target.classList.contains("favorite")) {
+                e.target.style.color = "#ccc";
+                e.target.classList.remove("favorite");
+              } else {
+                e.target.style.color = "red";
+                e.target.classList.add("favorite");
+              }
+            }}
+          />
+        </div>
+        <Link className="exercise" to={`/yogaappchain`}>
+          <img src={href} alt={props.title} className="exercise-img" />
+        </Link>
+      </div>
+    );
+  } else if ((props.title != "addYourExercise") && (props.title != "YourExercise")) {
     const href = `./images/${props.title}.jpg`;
     return (
       // <Link className="exercise" to="/yoga" state={{ exerciseName: props.title }}>
